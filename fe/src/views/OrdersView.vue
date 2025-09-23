@@ -128,7 +128,7 @@
             @click="deleteOrder(item)"
           >
             <v-icon>$delete</v-icon>
-            <v-tooltip activator="parent" location="top">Delete</v-tooltip>
+            <v-tooltip activator="parent" location="top">ewrwerwer</v-tooltip>
           </v-btn>
         </template>
       </v-data-table-server>

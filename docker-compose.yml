@@ -51,15 +51,20 @@ services:
     restart: unless-stopped
     environment:
       - VITE_API_URL=http://localhost:8000/api/v1
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     ports:
       - "3000:3000"
     volumes:
       - ./fe:/app
       - /app/node_modules
+      - /app/.vite
     depends_on:
       - backend
     networks:
       - app-network
+    stdin_open: true
+    tty: true
 
   # phpMyAdmin (Optional - for database management)
   phpmyadmin:

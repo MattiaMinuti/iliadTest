@@ -21,8 +21,12 @@ RUN adduser -S nextjs -u 1001
 RUN chown -R nextjs:nodejs /app
 USER nextjs
 
-# Expose port 3000
+# Expose port 3000 for the app and HMR
 EXPOSE 3000
 
-# Start the development server
+# Set environment variables for development
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+# Start the development server with hot reload
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
