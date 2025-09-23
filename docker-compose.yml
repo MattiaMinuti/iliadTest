@@ -1,0 +1,85 @@
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: order_management_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: order_management
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./be/database/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  # PHP Lumen Backend API
+  backend:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: order_management_api
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=mysql
+      - DB_DATABASE=order_management
+      - DB_USERNAME=app_user
+      - DB_PASSWORD=app_password
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./be:/var/www/html
+      - ./be/storage:/var/www/html/storage
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    command: ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+
+  # Vue.js Frontend
+  frontend:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    container_name: order_management_frontend
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./fe:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # phpMyAdmin (Optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: order_management_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: app_user
+      PMA_PASSWORD: app_password
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
