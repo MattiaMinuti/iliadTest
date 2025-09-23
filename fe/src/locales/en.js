@@ -159,7 +159,12 @@ export default {
     deleteProductFailed: 'Failed to delete product',
     insufficientStock: 'Insufficient stock for product: {product}',
     addAtLeastOneProduct: 'Please add at least one product to the order',
-    cannotDeleteProduct: 'Cannot delete product that is associated with orders'
+    cannotDeleteProduct: 'Cannot delete product that is associated with orders',
+    validationFailed: 'Validation failed',
+    orderNotFound: 'Order not found',
+    productNotFound: 'Product not found',
+    serverError: 'Internal server error',
+    genericError: 'An error occurred'
   },
   
   // Validation

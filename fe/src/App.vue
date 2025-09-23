@@ -66,7 +66,7 @@
           variant="text"
           @click="snackbar.show = false"
         >
-          Close
+          {{ $t('common.close') }}
         </v-btn>
       </template>
     </v-snackbar>

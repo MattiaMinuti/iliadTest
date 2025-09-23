@@ -248,6 +248,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { productService } from '@/services/products'
 import { useNotificationStore } from '@/stores/notification'
+import { showApiError } from '@/utils/errorHandler'
 
 export default {
   name: 'ProductsView',
@@ -337,7 +338,7 @@ export default {
         totalItems.value = response.data.total
       } catch (error) {
         console.error('Error loading products:', error)
-        notificationStore.showError(t('messages.loadProductsFailed'))
+        showApiError(notificationStore, error, t, 'messages.loadProductsFailed')
       } finally {
         loading.value = false
       }
@@ -379,8 +380,7 @@ export default {
         loadProducts()
       } catch (error) {
         console.error('Error saving product:', error)
-        const message = error.response?.data?.message || 'Failed to save product'
-        notificationStore.showError(message)
+        showApiError(notificationStore, error, t, 'messages.saveProductFailed')
       } finally {
         productDialog.saving = false
       }
@@ -400,8 +400,7 @@ export default {
         loadProducts()
       } catch (error) {
         console.error('Error deleting product:', error)
-        const message = error.response?.data?.message || 'Failed to delete product'
-        notificationStore.showError(message)
+        showApiError(notificationStore, error, t, 'messages.deleteProductFailed')
       } finally {
         deleteDialog.loading = false
       }

@@ -181,6 +181,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { orderService } from '@/services/orders'
 import { useNotificationStore } from '@/stores/notification'
+import { showApiError } from '@/utils/errorHandler'
 import OrderDialog from '@/components/OrderDialog.vue'
 
 export default {
@@ -258,7 +259,7 @@ export default {
         totalItems.value = response.data.total
       } catch (error) {
         console.error('Error loading orders:', error)
-        notificationStore.showError(t('messages.loadOrdersFailed'))
+        showApiError(notificationStore, error, t, 'messages.loadOrdersFailed')
       } finally {
         loading.value = false
       }
@@ -308,7 +309,7 @@ export default {
         loadOrders()
       } catch (error) {
         console.error('Error deleting order:', error)
-        notificationStore.showError(t('messages.deleteOrderFailed'))
+        showApiError(notificationStore, error, t, 'messages.deleteOrderFailed')
       } finally {
         deleteDialog.loading = false
       }

@@ -159,7 +159,12 @@ export default {
     deleteProductFailed: 'Eliminazione prodotto fallita',
     insufficientStock: 'Scorta insufficiente per il prodotto: {product}',
     addAtLeastOneProduct: 'Aggiungi almeno un prodotto all\'ordine',
-    cannotDeleteProduct: 'Impossibile eliminare prodotto associato ad ordini'
+    cannotDeleteProduct: 'Impossibile eliminare prodotto associato ad ordini',
+    validationFailed: 'Validazione fallita',
+    orderNotFound: 'Ordine non trovato',
+    productNotFound: 'Prodotto non trovato',
+    serverError: 'Errore del server',
+    genericError: 'Si è verificato un errore'
   },
   
   // Validation

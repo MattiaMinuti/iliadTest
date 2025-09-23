@@ -186,6 +186,7 @@ import { useI18n } from 'vue-i18n'
 import { orderService } from '@/services/orders'
 import { productService } from '@/services/products'
 import { useNotificationStore } from '@/stores/notification'
+import { showApiError } from '@/utils/errorHandler'
 
 export default {
   name: 'OrderDialog',
@@ -242,7 +243,7 @@ export default {
         availableProducts.value = response.data.data
       } catch (error) {
         console.error('Error loading products:', error)
-        notificationStore.showError(t('messages.loadProductsFailed'))
+        showApiError(notificationStore, error, t, 'messages.loadProductsFailed')
       }
     }
 
@@ -327,8 +328,7 @@ export default {
         emit('saved')
       } catch (error) {
         console.error('Error saving order:', error)
-        const message = error.response?.data?.message || t('messages.saveOrderFailed')
-        notificationStore.showError(message)
+        showApiError(notificationStore, error, t, 'messages.saveOrderFailed')
       } finally {
         saving.value = false
       }
