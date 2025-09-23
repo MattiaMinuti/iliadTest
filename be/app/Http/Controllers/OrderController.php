@@ -64,16 +64,10 @@ class OrderController extends Controller
                 'products.*.quantity' => 'required|integer|min:1',
             ]);
 
-            $order = Order::create([
-                'name' => $request->name,
-                'description' => $request->description,
-                'order_date' => $request->order_date,
-                'status' => $request->get('status', 'pending'),
-                'total_amount' => 0,
-            ]);
-
+            // FIRST: Check stock availability for ALL products before creating order
+            $productsToOrder = [];
             $totalAmount = 0;
-
+            
             foreach ($request->products as $productData) {
                 $product = Product::findOrFail($productData['product_id']);
                 
@@ -88,18 +82,35 @@ class OrderController extends Controller
                 $unitPrice = $product->price;
                 $totalPrice = $unitPrice * $productData['quantity'];
                 $totalAmount += $totalPrice;
-
-                $order->products()->attach($product->id, [
+                
+                $productsToOrder[] = [
+                    'product' => $product,
                     'quantity' => $productData['quantity'],
                     'unit_price' => $unitPrice,
                     'total_price' => $totalPrice,
+                ];
+            }
+
+            // SECOND: Create order only if all products are available
+            $order = Order::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'order_date' => $request->order_date,
+                'status' => $request->get('status', 'pending'),
+                'total_amount' => $totalAmount,
+            ]);
+
+            // THIRD: Attach products and reduce stock
+            foreach ($productsToOrder as $productOrder) {
+                $order->products()->attach($productOrder['product']->id, [
+                    'quantity' => $productOrder['quantity'],
+                    'unit_price' => $productOrder['unit_price'],
+                    'total_price' => $productOrder['total_price'],
                 ]);
 
                 // Reduce stock
-                $product->reduceStock($productData['quantity']);
+                $productOrder['product']->reduceStock($productOrder['quantity']);
             }
-
-            $order->update(['total_amount' => $totalAmount]);
             $order->load('products');
 
             return response()->json([
@@ -166,21 +177,24 @@ class OrderController extends Controller
 
             // Update products if provided
             if ($request->has('products')) {
-                // Restore stock from current products
-                foreach ($order->products as $currentProduct) {
-                    $currentProduct->increaseStock($currentProduct->pivot->quantity);
-                }
-
-                // Clear current products
-                $order->products()->detach();
-
+                // FIRST: Check stock availability for ALL new products before making changes
+                $productsToOrder = [];
                 $totalAmount = 0;
-
+                
                 foreach ($request->products as $productData) {
                     $product = Product::findOrFail($productData['product_id']);
                     
-                    // Check stock availability
-                    if (!$product->hasStock($productData['quantity'])) {
+                    // Calculate available stock (current stock + what we'll restore from this order)
+                    $currentOrderQuantity = 0;
+                    $currentProduct = $order->products->where('id', $product->id)->first();
+                    if ($currentProduct) {
+                        $currentOrderQuantity = $currentProduct->pivot->quantity;
+                    }
+                    
+                    $availableStock = $product->stock_quantity + $currentOrderQuantity;
+                    
+                    // Check if we have enough stock
+                    if ($availableStock < $productData['quantity']) {
                         return response()->json([
                             'success' => false,
                             'message' => "Insufficient stock for product: {$product->name}",
@@ -190,15 +204,33 @@ class OrderController extends Controller
                     $unitPrice = $product->price;
                     $totalPrice = $unitPrice * $productData['quantity'];
                     $totalAmount += $totalPrice;
-
-                    $order->products()->attach($product->id, [
+                    
+                    $productsToOrder[] = [
+                        'product' => $product,
                         'quantity' => $productData['quantity'],
                         'unit_price' => $unitPrice,
                         'total_price' => $totalPrice,
+                    ];
+                }
+
+                // SECOND: Restore stock from current products (now that we know we can fulfill the new order)
+                foreach ($order->products as $currentProduct) {
+                    $currentProduct->increaseStock($currentProduct->pivot->quantity);
+                }
+
+                // THIRD: Clear current products
+                $order->products()->detach();
+
+                // FOURTH: Attach new products and reduce stock
+                foreach ($productsToOrder as $productOrder) {
+                    $order->products()->attach($productOrder['product']->id, [
+                        'quantity' => $productOrder['quantity'],
+                        'unit_price' => $productOrder['unit_price'],
+                        'total_price' => $productOrder['total_price'],
                     ]);
 
                     // Reduce stock
-                    $product->reduceStock($productData['quantity']);
+                    $productOrder['product']->reduceStock($productOrder['quantity']);
                 }
 
                 $order->total_amount = $totalAmount;
