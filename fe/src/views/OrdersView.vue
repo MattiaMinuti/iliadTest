@@ -148,10 +148,10 @@
       max-width="400"
     >
       <v-card>
-        <v-card-title>Confirm Delete</v-card-title>
+        <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
-          Are you sure you want to delete the order "{{ deleteDialog.order?.name }}"?
-          This action cannot be undone.
+          {{ $t('confirmations.deleteOrder', { name: deleteDialog.order?.name }) }}
+          {{ $t('confirmations.deleteWarning') }}
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -159,7 +159,7 @@
             variant="text"
             @click="deleteDialog.show = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </v-btn>
           <v-btn
             color="error"
@@ -167,7 +167,7 @@
             :loading="deleteDialog.loading"
             @click="confirmDelete"
           >
-            Delete
+            {{ $t('common.delete') }}
           </v-btn>
         </v-card-actions>
       </v-card>

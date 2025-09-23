@@ -6,9 +6,9 @@
     persistent
   >
     <v-card>
-      <v-card-title class="text-h5">
-        {{ mode === 'create' ? 'Create New Order' : 'Edit Order' }}
-      </v-card-title>
+        <v-card-title class="text-h5">
+          {{ mode === 'create' ? $t('orderDialog.createTitle') : $t('orderDialog.editTitle') }}
+        </v-card-title>
 
       <v-form ref="form" @submit.prevent="saveOrder">
         <v-card-text>
@@ -16,7 +16,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.name"
-                label="Order Name *"
+                :label="$t('orderDialog.orderName') + ' *'"
                 variant="outlined"
                 :rules="[rules.required]"
                 required
@@ -25,7 +25,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.order_date"
-                label="Order Date *"
+                :label="$t('orderDialog.orderDate') + ' *'"
                 type="date"
                 variant="outlined"
                 :rules="[rules.required]"
@@ -39,14 +39,14 @@
               <v-select
                 v-model="formData.status"
                 :items="statusOptions"
-                label="Status"
+                :label="$t('orders.status')"
                 variant="outlined"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 :model-value="totalAmount"
-                label="Total Amount"
+                :label="$t('orderDialog.totalAmount')"
                 variant="outlined"
                 readonly
                 prepend-inner-icon="mdi-currency-usd"
@@ -58,7 +58,7 @@
             <v-col cols="12">
               <v-textarea
                 v-model="formData.description"
-                label="Description"
+                :label="$t('orderDialog.description')"
                 variant="outlined"
                 rows="3"
               />
@@ -70,14 +70,14 @@
           <!-- Products Section -->
           <div class="mb-4">
             <div class="d-flex justify-space-between align-center mb-3">
-              <h3 class="text-h6">Order Products</h3>
+              <h3 class="text-h6">{{ $t('orderDialog.orderProducts') }}</h3>
               <v-btn
                 color="primary"
                 size="small"
                 @click="addProduct"
               >
                 <v-icon start>$plus</v-icon>
-                Add Product
+                {{ $t('orderDialog.addProduct') }}
               </v-btn>
             </div>
 
@@ -87,7 +87,7 @@
               variant="tonal"
               class="mb-4"
             >
-              No products added to this order yet. Click "Add Product" to get started.
+              {{ $t('orderDialog.noProducts') }}
             </v-alert>
 
             <v-card
@@ -104,7 +104,7 @@
                       :items="availableProducts"
                       item-title="name"
                       item-value="id"
-                      label="Product *"
+                      :label="$t('orderDialog.product') + ' *'"
                       variant="outlined"
                       density="compact"
                       :rules="[rules.required]"
@@ -113,7 +113,7 @@
                       <template v-slot:item="{ props, item }">
                         <v-list-item v-bind="props">
                           <template v-slot:subtitle>
-                            SKU: {{ item.raw.sku }} | ${{ item.raw.price }} | Stock: {{ item.raw.stock_quantity }}
+                            {{ $t('orderDetail.sku') }}: {{ item.raw.sku }} | ${{ item.raw.price }} | {{ $t('orderDialog.stock') }}: {{ item.raw.stock_quantity }}
                           </template>
                         </v-list-item>
                       </template>
@@ -122,7 +122,7 @@
                   <v-col cols="12" md="3">
                     <v-text-field
                       v-model.number="productOrder.quantity"
-                      label="Quantity *"
+                      :label="$t('orderDetail.quantity') + ' *'"
                       type="number"
                       variant="outlined"
                       density="compact"
@@ -134,7 +134,7 @@
                   <v-col cols="12" md="3">
                     <v-text-field
                       :model-value="getProductTotal(index)"
-                      label="Total"
+                      :label="$t('orders.total')"
                       variant="outlined"
                       density="compact"
                       readonly
@@ -164,7 +164,7 @@
             variant="text"
             @click="closeDialog"
           >
-            Cancel
+            {{ $t('orderDialog.cancel') }}
           </v-btn>
           <v-btn
             color="primary"
@@ -172,7 +172,7 @@
             :loading="saving"
             :disabled="formData.products.length === 0"
           >
-            {{ mode === 'create' ? 'Create Order' : 'Update Order' }}
+            {{ mode === 'create' ? $t('orderDialog.createOrder') : $t('orderDialog.updateOrder') }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -182,6 +182,7 @@
 
 <script>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { orderService } from '@/services/orders'
 import { productService } from '@/services/products'
 import { useNotificationStore } from '@/stores/notification'
@@ -200,6 +201,7 @@ export default {
   emits: ['update:modelValue', 'saved'],
   setup(props, { emit }) {
     const notificationStore = useNotificationStore()
+    const { t } = useI18n()
     const form = ref(null)
     const saving = ref(false)
     const availableProducts = ref([])
@@ -212,16 +214,16 @@ export default {
       products: []
     })
 
-    const statusOptions = [
-      { title: 'Pending', value: 'pending' },
-      { title: 'Processing', value: 'processing' },
-      { title: 'Completed', value: 'completed' },
-      { title: 'Cancelled', value: 'cancelled' }
-    ]
+    const statusOptions = computed(() => [
+      { title: t('status.pending'), value: 'pending' },
+      { title: t('status.processing'), value: 'processing' },
+      { title: t('status.completed'), value: 'completed' },
+      { title: t('status.cancelled'), value: 'cancelled' }
+    ])
 
     const rules = {
-      required: (value) => !!value || 'This field is required',
-      minQuantity: (value) => value > 0 || 'Quantity must be greater than 0'
+      required: (value) => !!value || t('validation.required'),
+      minQuantity: (value) => value > 0 || t('validation.minQuantity')
     }
 
     const totalAmount = computed(() => {
@@ -240,7 +242,7 @@ export default {
         availableProducts.value = response.data.data
       } catch (error) {
         console.error('Error loading products:', error)
-        notificationStore.showError('Failed to load products')
+        notificationStore.showError(t('messages.loadProductsFailed'))
       }
     }
 
@@ -300,7 +302,7 @@ export default {
       if (!valid) return
 
       if (formData.products.length === 0) {
-        notificationStore.showError('Please add at least one product to the order')
+        notificationStore.showError(t('messages.addAtLeastOneProduct'))
         return
       }
 
@@ -316,16 +318,16 @@ export default {
 
         if (props.mode === 'create') {
           await orderService.createOrder(orderData)
-          notificationStore.showSuccess('Order created successfully')
+          notificationStore.showSuccess(t('messages.orderCreated'))
         } else {
           await orderService.updateOrder(props.order.id, orderData)
-          notificationStore.showSuccess('Order updated successfully')
+          notificationStore.showSuccess(t('messages.orderUpdated'))
         }
 
         emit('saved')
       } catch (error) {
         console.error('Error saving order:', error)
-        const message = error.response?.data?.message || 'Failed to save order'
+        const message = error.response?.data?.message || t('messages.saveOrderFailed')
         notificationStore.showError(message)
       } finally {
         saving.value = false

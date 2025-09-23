@@ -125,7 +125,7 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          {{ productDialog.mode === 'create' ? 'Create New Product' : 'Edit Product' }}
+          {{ productDialog.mode === 'create' ? $t('productDialog.createTitle') : $t('productDialog.editTitle') }}
         </v-card-title>
 
         <v-form ref="form" @submit.prevent="saveProduct">
@@ -134,7 +134,7 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="productDialog.product.name"
-                  label="Product Name *"
+                  :label="$t('productDialog.productName') + ' *'"
                   variant="outlined"
                   :rules="[rules.required]"
                   required
@@ -143,7 +143,7 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="productDialog.product.sku"
-                  label="SKU *"
+                  :label="$t('orderDetail.sku') + ' *'"
                   variant="outlined"
                   :rules="[rules.required]"
                   required
@@ -155,7 +155,7 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model.number="productDialog.product.price"
-                  label="Price *"
+                  :label="$t('productDialog.price') + ' *'"
                   type="number"
                   step="0.01"
                   min="0"
@@ -168,7 +168,7 @@
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model.number="productDialog.product.stock_quantity"
-                  label="Stock Quantity *"
+                  :label="$t('productDialog.stockQuantity') + ' *'"
                   type="number"
                   min="0"
                   variant="outlined"
@@ -182,7 +182,7 @@
               <v-col cols="12">
                 <v-textarea
                   v-model="productDialog.product.description"
-                  label="Description"
+                  :label="$t('productDialog.description')"
                   variant="outlined"
                   rows="3"
                 />
@@ -203,7 +203,7 @@
               type="submit"
               :loading="productDialog.saving"
             >
-              {{ productDialog.mode === 'create' ? 'Create Product' : 'Update Product' }}
+              {{ productDialog.mode === 'create' ? $t('productDialog.createProduct') : $t('productDialog.updateProduct') }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -216,10 +216,10 @@
       max-width="400"
     >
       <v-card>
-        <v-card-title>Confirm Delete</v-card-title>
+        <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
-          Are you sure you want to delete the product "{{ deleteDialog.product?.name }}"?
-          This action cannot be undone.
+          {{ $t('confirmations.deleteProduct', { name: deleteDialog.product?.name }) }}
+          {{ $t('confirmations.deleteWarning') }}
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -227,7 +227,7 @@
             variant="text"
             @click="deleteDialog.show = false"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </v-btn>
           <v-btn
             color="error"
@@ -235,7 +235,7 @@
             :loading="deleteDialog.loading"
             @click="confirmDelete"
           >
-            Delete
+            {{ $t('common.delete') }}
           </v-btn>
         </v-card-actions>
       </v-card>
