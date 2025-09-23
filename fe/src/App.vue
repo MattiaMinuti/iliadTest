@@ -14,12 +14,17 @@
       
       <v-spacer></v-spacer>
       
+      <LanguageSwitcher class="mr-2" />
+      
       <v-btn
         icon
         variant="text"
         @click="toggleTheme"
       >
         <v-icon>{{ isDark ? '$brightness7' : '$brightness4' }}</v-icon>
+        <v-tooltip activator="parent" location="bottom">
+          {{ $t('app.toggleTheme') }}
+        </v-tooltip>
       </v-btn>
     </v-app-bar>
 
@@ -38,7 +43,7 @@
           <template v-slot:prepend>
             <v-icon>{{ item.icon }}</v-icon>
           </template>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -72,9 +77,13 @@
 import { ref, computed } from 'vue'
 import { useTheme } from 'vuetify'
 import { useNotificationStore } from '@/stores/notification'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
 export default {
   name: 'App',
+  components: {
+    LanguageSwitcher
+  },
   setup() {
     const theme = useTheme()
     const notificationStore = useNotificationStore()
@@ -82,8 +91,8 @@ export default {
     const drawer = ref(false)
     
     const menuItems = [
-      { title: 'Orders', icon: '$clipboardList', route: '/' },
-      { title: 'Products', icon: '$packageVariant', route: '/products' },
+      { title: 'nav.orders', icon: '$clipboardList', route: '/' },
+      { title: 'nav.products', icon: '$packageVariant', route: '/products' },
     ]
     
     const isDark = computed(() => theme.global.name.value === 'dark')

@@ -40,6 +40,7 @@ import {
 
 import App from './App.vue'
 import router from './router'
+import i18n from './plugins/i18n'
 
 const vuetify = createVuetify({
   components,
@@ -122,4 +123,5 @@ createApp(App)
   .use(pinia)
   .use(router)
   .use(vuetify)
+  .use(i18n)
   .mount('#app')

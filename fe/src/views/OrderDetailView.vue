@@ -7,7 +7,7 @@
           prepend-icon="$arrowLeft"
           @click="$router.go(-1)"
         >
-          Back to Orders
+          {{ $t('orderDetail.backToOrders') }}
         </v-btn>
       </v-col>
     </v-row>
@@ -52,14 +52,14 @@
       <v-row class="mb-4">
         <v-col cols="12" md="6">
           <v-card elevation="1">
-            <v-card-title>Order Information</v-card-title>
+            <v-card-title>{{ $t('orderDetail.orderInformation') }}</v-card-title>
             <v-card-text>
               <v-list lines="two">
                 <v-list-item>
                   <template v-slot:prepend>
                     <v-icon>$calendar</v-icon>
                   </template>
-                  <v-list-item-title>Order Date</v-list-item-title>
+                  <v-list-item-title>{{ $t('orderDetail.orderDate') }}</v-list-item-title>
                   <v-list-item-subtitle>{{ formatDate(order.order_date) }}</v-list-item-subtitle>
                 </v-list-item>
                 
@@ -67,14 +67,14 @@
                   <template v-slot:prepend>
                     <v-icon>$flag</v-icon>
                   </template>
-                  <v-list-item-title>Status</v-list-item-title>
+                  <v-list-item-title>{{ $t('orders.status') }}</v-list-item-title>
                   <v-list-item-subtitle>
                     <v-chip
                       :color="getStatusColor(order.status)"
                       size="small"
                       variant="tonal"
                     >
-                      {{ order.status }}
+                      {{ $t(`status.${order.status}`) }}
                     </v-chip>
                   </v-list-item-subtitle>
                 </v-list-item>
@@ -83,7 +83,7 @@
                   <template v-slot:prepend>
                     <v-icon>$currencyUsd</v-icon>
                   </template>
-                  <v-list-item-title>Total Amount</v-list-item-title>
+                  <v-list-item-title>{{ $t('orderDetail.totalAmount') }}</v-list-item-title>
                   <v-list-item-subtitle class="text-h6 font-weight-bold">
                     ${{ parseFloat(order.total_amount).toFixed(2) }}
                   </v-list-item-subtitle>
@@ -93,9 +93,9 @@
                   <template v-slot:prepend>
                     <v-icon>$packageVariant</v-icon>
                   </template>
-                  <v-list-item-title>Total Items</v-list-item-title>
+                  <v-list-item-title>{{ $t('orderDetail.totalItems') }}</v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ order.products?.reduce((sum, p) => sum + p.pivot.quantity, 0) || 0 }} items
+                    {{ order.products?.reduce((sum, p) => sum + p.pivot.quantity, 0) || 0 }} {{ $t('orderDetail.items') }}
                   </v-list-item-subtitle>
                 </v-list-item>
               </v-list>
@@ -105,7 +105,7 @@
 
         <v-col cols="12" md="6">
           <v-card elevation="1">
-            <v-card-title>Actions</v-card-title>
+            <v-card-title>{{ $t('orderDetail.actions') }}</v-card-title>
             <v-card-text>
               <v-btn
                 color="primary"
@@ -115,7 +115,7 @@
                 block
                 @click="editOrder"
               >
-                Edit Order
+                {{ $t('orderDetail.editOrder') }}
               </v-btn>
               
               <v-btn
@@ -125,7 +125,7 @@
                 block
                 @click="deleteOrder"
               >
-                Delete Order
+                {{ $t('orderDetail.deleteOrder') }}
               </v-btn>
             </v-card-text>
           </v-card>
@@ -136,7 +136,7 @@
       <v-card elevation="1">
         <v-card-title>
           <v-icon class="mr-2">$packageVariant</v-icon>
-          Order Products
+          {{ $t('orderDetail.orderProducts') }}
         </v-card-title>
         
         <v-card-text v-if="!order.products || order.products.length === 0">
@@ -145,18 +145,18 @@
             variant="tonal"
             class="mb-0"
           >
-            No products found in this order.
+            {{ $t('orderDetail.noProducts') }}
           </v-alert>
         </v-card-text>
 
         <v-table v-else>
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>SKU</th>
-              <th class="text-right">Unit Price</th>
-              <th class="text-right">Quantity</th>
-              <th class="text-right">Total Price</th>
+              <th>{{ $t('orderDetail.productName') }}</th>
+              <th>{{ $t('orderDetail.sku') }}</th>
+              <th class="text-right">{{ $t('orderDetail.unitPrice') }}</th>
+              <th class="text-right">{{ $t('orderDetail.quantity') }}</th>
+              <th class="text-right">{{ $t('orderDetail.totalPrice') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -190,7 +190,7 @@
           </tbody>
           <tfoot>
             <tr class="font-weight-bold">
-              <td colspan="4" class="text-right">Total:</td>
+              <td colspan="4" class="text-right">{{ $t('orders.total') }}:</td>
               <td class="text-right text-h6">
                 ${{ parseFloat(order.total_amount).toFixed(2) }}
               </td>
@@ -252,6 +252,7 @@
 <script>
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { orderService } from '@/services/orders'
 import { useNotificationStore } from '@/stores/notification'
 import OrderDialog from '@/components/OrderDialog.vue'
@@ -265,6 +266,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const notificationStore = useNotificationStore()
+    const { t } = useI18n()
 
     const loading = ref(true)
     const order = ref(null)
@@ -287,7 +289,7 @@ export default {
         order.value = response.data
       } catch (error) {
         console.error('Error loading order:', error)
-        notificationStore.showError('Failed to load order details')
+        notificationStore.showError(t('messages.loadOrdersFailed'))
       } finally {
         loading.value = false
       }
@@ -321,11 +323,11 @@ export default {
       deleteDialog.loading = true
       try {
         await orderService.deleteOrder(order.value.id)
-        notificationStore.showSuccess('Order deleted successfully')
+        notificationStore.showSuccess(t('messages.orderDeleted'))
         router.push('/')
       } catch (error) {
         console.error('Error deleting order:', error)
-        notificationStore.showError('Failed to delete order')
+        notificationStore.showError(t('messages.deleteOrderFailed'))
       } finally {
         deleteDialog.loading = false
         deleteDialog.show = false
@@ -335,7 +337,7 @@ export default {
     const onOrderSaved = () => {
       orderDialog.show = false
       loadOrder()
-      notificationStore.showSuccess('Order updated successfully')
+      notificationStore.showSuccess(t('messages.orderUpdated'))
     }
 
     onMounted(() => {

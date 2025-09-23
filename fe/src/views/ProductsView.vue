@@ -2,9 +2,9 @@
   <div>
     <v-row class="mb-4">
       <v-col>
-        <h1 class="text-h4 font-weight-bold mb-2">Products Management</h1>
+        <h1 class="text-h4 font-weight-bold mb-2">{{ $t('products.title') }}</h1>
         <p class="text-subtitle-1 text-medium-emphasis">
-          Manage product inventory and information
+          {{ $t('products.subtitle') }}
         </p>
       </v-col>
     </v-row>
@@ -16,7 +16,7 @@
           <v-col cols="12" md="4">
             <v-text-field
               v-model="filters.search"
-              label="Search products..."
+              :label="$t('products.searchPlaceholder')"
               prepend-inner-icon="$magnify"
               variant="outlined"
               density="compact"
@@ -28,7 +28,7 @@
             <v-select
               v-model="filters.inStock"
               :items="stockOptions"
-              label="Stock Status"
+              :label="$t('products.stockStatus')"
               variant="outlined"
               density="compact"
               clearable
@@ -39,7 +39,7 @@
             <v-select
               v-model="sortBy"
               :items="sortOptions"
-              label="Sort By"
+              :label="$t('products.sortBy')"
               variant="outlined"
               density="compact"
               @update:model-value="loadProducts"
@@ -53,7 +53,7 @@
               @click="openCreateDialog"
             >
               <v-icon start>$plus</v-icon>
-              New Product
+              {{ $t('products.newProduct') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -244,7 +244,8 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { productService } from '@/services/products'
 import { useNotificationStore } from '@/stores/notification'
 
@@ -252,6 +253,7 @@ export default {
   name: 'ProductsView',
   setup() {
     const notificationStore = useNotificationStore()
+    const { t } = useI18n()
     const form = ref(null)
 
     const loading = ref(false)
@@ -285,30 +287,30 @@ export default {
       loading: false
     })
 
-    const headers = [
-      { title: 'Product Name', key: 'name', sortable: true },
-      { title: 'SKU', key: 'sku', sortable: true },
-      { title: 'Price', key: 'price', sortable: true },
-      { title: 'Stock', key: 'stock_quantity', sortable: true },
-      { title: 'Actions', key: 'actions', sortable: false, width: '120px' }
-    ]
+    const headers = computed(() => [
+      { title: t('products.productName'), key: 'name', sortable: true },
+      { title: t('orderDetail.sku'), key: 'sku', sortable: true },
+      { title: t('products.price'), key: 'price', sortable: true },
+      { title: t('products.stock'), key: 'stock_quantity', sortable: true },
+      { title: t('orders.actions'), key: 'actions', sortable: false, width: '120px' }
+    ])
 
-    const stockOptions = [
-      { title: 'In Stock', value: true },
-      { title: 'Out of Stock', value: false }
-    ]
+    const stockOptions = computed(() => [
+      { title: t('stockStatus.inStock'), value: true },
+      { title: t('stockStatus.outOfStock'), value: false }
+    ])
 
-    const sortOptions = [
-      { title: 'Name', value: 'name' },
-      { title: 'Price', value: 'price' },
-      { title: 'Stock', value: 'stock_quantity' },
-      { title: 'SKU', value: 'sku' }
-    ]
+    const sortOptions = computed(() => [
+      { title: t('sortOptions.name'), value: 'name' },
+      { title: t('sortOptions.price'), value: 'price' },
+      { title: t('sortOptions.stock'), value: 'stock_quantity' },
+      { title: t('sortOptions.sku'), value: 'sku' }
+    ])
 
     const rules = {
-      required: (value) => !!value || 'This field is required',
-      minPrice: (value) => value >= 0 || 'Price must be 0 or greater',
-      minStock: (value) => value >= 0 || 'Stock quantity must be 0 or greater'
+      required: (value) => !!value || t('validation.required'),
+      minPrice: (value) => value >= 0 || t('validation.minPrice'),
+      minStock: (value) => value >= 0 || t('validation.minStock')
     }
 
     let searchTimeout = null
@@ -335,7 +337,7 @@ export default {
         totalItems.value = response.data.total
       } catch (error) {
         console.error('Error loading products:', error)
-        notificationStore.showError('Failed to load products')
+        notificationStore.showError(t('messages.loadProductsFailed'))
       } finally {
         loading.value = false
       }
@@ -367,10 +369,10 @@ export default {
       try {
         if (productDialog.mode === 'create') {
           await productService.createProduct(productDialog.product)
-          notificationStore.showSuccess('Product created successfully')
+          notificationStore.showSuccess(t('messages.productCreated'))
         } else {
           await productService.updateProduct(productDialog.product.id, productDialog.product)
-          notificationStore.showSuccess('Product updated successfully')
+          notificationStore.showSuccess(t('messages.productUpdated'))
         }
 
         productDialog.show = false
@@ -393,7 +395,7 @@ export default {
       deleteDialog.loading = true
       try {
         await productService.deleteProduct(deleteDialog.product.id)
-        notificationStore.showSuccess('Product deleted successfully')
+        notificationStore.showSuccess(t('messages.productDeleted'))
         deleteDialog.show = false
         loadProducts()
       } catch (error) {

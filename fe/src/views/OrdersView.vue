@@ -2,9 +2,9 @@
   <div>
     <v-row class="mb-4">
       <v-col>
-        <h1 class="text-h4 font-weight-bold mb-2">Orders Management</h1>
+        <h1 class="text-h4 font-weight-bold mb-2">{{ $t('orders.title') }}</h1>
         <p class="text-subtitle-1 text-medium-emphasis">
-          View, search, and manage all customer orders
+          {{ $t('orders.subtitle') }}
         </p>
       </v-col>
     </v-row>
@@ -16,7 +16,7 @@
           <v-col cols="12" md="4">
             <v-text-field
               v-model="filters.search"
-              label="Search orders..."
+              :label="$t('orders.searchPlaceholder')"
               prepend-inner-icon="$magnify"
               variant="outlined"
               density="compact"
@@ -27,7 +27,7 @@
           <v-col cols="12" md="2">
             <v-text-field
               v-model="filters.startDate"
-              label="Start Date"
+              :label="$t('orders.startDate')"
               type="date"
               variant="outlined"
               density="compact"
@@ -37,7 +37,7 @@
           <v-col cols="12" md="2">
             <v-text-field
               v-model="filters.endDate"
-              label="End Date"
+              :label="$t('orders.endDate')"
               type="date"
               variant="outlined"
               density="compact"
@@ -48,7 +48,7 @@
             <v-select
               v-model="filters.status"
               :items="statusOptions"
-              label="Status"
+              :label="$t('orders.status')"
               variant="outlined"
               density="compact"
               clearable
@@ -63,7 +63,7 @@
               @click="openCreateDialog"
             >
               <v-icon start>$plus</v-icon>
-              New Order
+              {{ $t('orders.newOrder') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -109,7 +109,7 @@
             @click="viewOrder(item.id)"
           >
             <v-icon>$eye</v-icon>
-            <v-tooltip activator="parent" location="top">View Details</v-tooltip>
+            <v-tooltip activator="parent" location="top">{{ $t('orders.viewDetails') }}</v-tooltip>
           </v-btn>
           <v-btn
             icon
@@ -118,7 +118,7 @@
             @click="editOrder(item)"
           >
             <v-icon>$pencil</v-icon>
-            <v-tooltip activator="parent" location="top">Edit</v-tooltip>
+            <v-tooltip activator="parent" location="top">{{ $t('orders.edit') }}</v-tooltip>
           </v-btn>
           <v-btn
             icon
@@ -128,7 +128,7 @@
             @click="deleteOrder(item)"
           >
             <v-icon>$delete</v-icon>
-            <v-tooltip activator="parent" location="top">ewrwerwer</v-tooltip>
+            <v-tooltip activator="parent" location="top">{{ $t('orders.delete') }}</v-tooltip>
           </v-btn>
         </template>
       </v-data-table-server>
@@ -176,8 +176,9 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { orderService } from '@/services/orders'
 import { useNotificationStore } from '@/stores/notification'
 import OrderDialog from '@/components/OrderDialog.vue'
@@ -190,6 +191,7 @@ export default {
   setup() {
     const router = useRouter()
     const notificationStore = useNotificationStore()
+    const { t } = useI18n()
 
     const loading = ref(false)
     const orders = ref([])
@@ -216,20 +218,20 @@ export default {
       loading: false
     })
 
-    const headers = [
-      { title: 'Order Name', key: 'name', sortable: true },
-      { title: 'Date', key: 'order_date', sortable: true },
-      { title: 'Status', key: 'status', sortable: true },
-      { title: 'Total', key: 'total_amount', sortable: true },
-      { title: 'Actions', key: 'actions', sortable: false, width: '120px' }
-    ]
+    const headers = computed(() => [
+      { title: t('orders.orderName'), key: 'name', sortable: true },
+      { title: t('orders.date'), key: 'order_date', sortable: true },
+      { title: t('orders.status'), key: 'status', sortable: true },
+      { title: t('orders.total'), key: 'total_amount', sortable: true },
+      { title: t('orders.actions'), key: 'actions', sortable: false, width: '120px' }
+    ])
 
-    const statusOptions = [
-      { title: 'Pending', value: 'pending' },
-      { title: 'Processing', value: 'processing' },
-      { title: 'Completed', value: 'completed' },
-      { title: 'Cancelled', value: 'cancelled' }
-    ]
+    const statusOptions = computed(() => [
+      { title: t('status.pending'), value: 'pending' },
+      { title: t('status.processing'), value: 'processing' },
+      { title: t('status.completed'), value: 'completed' },
+      { title: t('status.cancelled'), value: 'cancelled' }
+    ])
 
     let searchTimeout = null
     const debouncedSearch = () => {
@@ -256,7 +258,7 @@ export default {
         totalItems.value = response.data.total
       } catch (error) {
         console.error('Error loading orders:', error)
-        notificationStore.showError('Failed to load orders')
+        notificationStore.showError(t('messages.loadOrdersFailed'))
       } finally {
         loading.value = false
       }
@@ -301,12 +303,12 @@ export default {
       deleteDialog.loading = true
       try {
         await orderService.deleteOrder(deleteDialog.order.id)
-        notificationStore.showSuccess('Order deleted successfully')
+        notificationStore.showSuccess(t('messages.orderDeleted'))
         deleteDialog.show = false
         loadOrders()
       } catch (error) {
         console.error('Error deleting order:', error)
-        notificationStore.showError('Failed to delete order')
+        notificationStore.showError(t('messages.deleteOrderFailed'))
       } finally {
         deleteDialog.loading = false
       }
