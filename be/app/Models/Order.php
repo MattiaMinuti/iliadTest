@@ -30,14 +30,6 @@ class Order extends Model
                     ->withTimestamps();
     }
 
-    /**
-     * Calculate and update the total amount for the order.
-     */
-    public function calculateTotalAmount(): void
-    {
-        $total = $this->products()->sum('order_products.total_price');
-        $this->update(['total_amount' => $total]);
-    }
 
     /**
      * Scope a query to filter orders by date range.

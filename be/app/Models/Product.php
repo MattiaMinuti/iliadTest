@@ -32,27 +32,10 @@ class Product extends Model
 
     /**
      * Check if product has sufficient stock.
+     * This is a simple data accessor, not business logic.
      */
     public function hasStock(int $quantity): bool
     {
         return $this->stock_quantity >= $quantity;
-    }
-
-    /**
-     * Reduce stock quantity.
-     */
-    public function reduceStock(int $quantity): void
-    {
-        if ($this->hasStock($quantity)) {
-            $this->decrement('stock_quantity', $quantity);
-        }
-    }
-
-    /**
-     * Increase stock quantity.
-     */
-    public function increaseStock(int $quantity): void
-    {
-        $this->increment('stock_quantity', $quantity);
     }
 }
