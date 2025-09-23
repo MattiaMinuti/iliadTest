@@ -58,6 +58,7 @@
           <v-col cols="12" md="2">
             <v-btn
               color="primary"
+              variant="elevated"
               block
               @click="openCreateDialog"
             >

@@ -4,17 +4,19 @@
       color="primary"
       dark
       app
-      elevation="2"
+      elevation="1"
+      height="64"
     >
-      <v-app-bar-title>
-        <v-icon class="mr-2">$clipboardList</v-icon>
-        Order Management System
+      <v-app-bar-title class="font-weight-bold">
+        <v-icon class="mr-2" size="28">$clipboardList</v-icon>
+        <span class="text-h5">Order Management</span>
       </v-app-bar-title>
       
       <v-spacer></v-spacer>
       
       <v-btn
         icon
+        variant="text"
         @click="toggleTheme"
       >
         <v-icon>{{ isDark ? '$brightness7' : '$brightness4' }}</v-icon>
@@ -105,6 +107,34 @@ export default {
 
 <style scoped>
 .v-app-bar-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.v-app-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+</style>
+
+<style>
+/* Stili globali per il tema Iliad */
+.v-btn--variant-elevated {
+  box-shadow: 0 2px 8px rgba(230, 0, 18, 0.2) !important;
+}
+
+.v-btn--variant-elevated:hover {
+  box-shadow: 0 4px 12px rgba(230, 0, 18, 0.3) !important;
+}
+
+.v-card {
+  border-radius: 8px !important;
+}
+
+.v-chip {
   font-weight: 500;
+}
+
+.v-data-table .v-data-table-header {
+  background-color: rgba(245, 245, 245, 0.8);
 }
 </style>
