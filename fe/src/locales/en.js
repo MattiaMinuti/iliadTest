@@ -1,7 +1,7 @@
 export default {
   // Navigation & Header
   app: {
-    title: 'Order Management',
+    title: 'Gestionale Iliad',
     toggleTheme: 'Toggle theme',
     changeLanguage: 'Change language'
   },

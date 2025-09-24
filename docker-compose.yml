@@ -2,7 +2,7 @@ services:
   # MySQL Database
   mysql:
     image: mysql:8.0
-    container_name: order_management_db
+    container_name: gestionale_iliad_db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root_password
@@ -22,7 +22,7 @@ services:
     build:
       context: ./be
       dockerfile: Dockerfile
-    container_name: order_management_api
+    container_name: gestionale_iliad_api
     restart: unless-stopped
     environment:
       - APP_ENV=production
@@ -47,7 +47,7 @@ services:
     build:
       context: ./fe
       dockerfile: Dockerfile
-    container_name: order_management_frontend
+    container_name: gestionale_iliad_frontend
     restart: unless-stopped
     environment:
       - VITE_API_URL=http://localhost:8000/api/v1
@@ -69,7 +69,7 @@ services:
   # phpMyAdmin (Optional - for database management)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: order_management_phpmyadmin
+    container_name: gestionale_iliad_phpmyadmin
     restart: unless-stopped
     environment:
       PMA_HOST: mysql

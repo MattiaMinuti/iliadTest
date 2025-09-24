@@ -7,10 +7,10 @@
       elevation="1"
       height="64"
     >
-      <v-app-bar-title class="font-weight-bold">
-        <v-icon class="mr-2" size="28">$clipboardList</v-icon>
-        <span class="text-h5">Order Management</span>
-      </v-app-bar-title>
+          <v-app-bar-title class="font-weight-bold">
+            <v-icon class="mr-2" size="28">$clipboardList</v-icon>
+            <span class="text-h5">{{ $t('app.title') }}</span>
+          </v-app-bar-title>
       
       <v-spacer></v-spacer>
       

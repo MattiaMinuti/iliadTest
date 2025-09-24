@@ -10,7 +10,7 @@
 
 $router->get('/', function () use ($router) {
     return response()->json([
-        'message' => 'Order Management API',
+        'message' => 'Gestionale Iliad API',
         'version' => $router->app->version(),
         'status' => 'running',
         'documentation' => 'http://localhost:8000/swagger',
@@ -23,9 +23,9 @@ $router->get('/api/documentation', function () {
     return response()->json([
         "openapi" => "3.0.0",
         "info" => [
-            "title" => "Order Management System API",
+            "title" => "Gestionale Iliad API",
             "version" => "1.0.0",
-            "description" => "RESTful API for managing orders and products in an order management system"
+            "description" => "RESTful API per la gestione ordini e prodotti del Gestionale Iliad"
         ],
         "servers" => [
             ["url" => "http://localhost:8000", "description" => "Local Development Server"],

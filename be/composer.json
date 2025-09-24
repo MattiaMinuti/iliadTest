@@ -1,6 +1,6 @@
 {
-    "name": "iliad/order-management-api",
-    "description": "Order Management System API built with Lumen",
+    "name": "iliad/gestionale-iliad-api",
+    "description": "Gestionale Iliad API built with Lumen",
     "keywords": ["framework", "laravel", "lumen", "api"],
     "license": "MIT",
     "type": "project",

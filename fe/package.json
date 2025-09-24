@@ -1,7 +1,7 @@
 {
-  "name": "order-management-frontend",
+  "name": "gestionale-iliad-frontend",
   "version": "1.0.0",
-  "description": "Order Management System Frontend",
+  "description": "Gestionale Iliad Frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
