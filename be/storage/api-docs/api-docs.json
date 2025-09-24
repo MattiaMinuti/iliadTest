@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Order Management System API",
+    "title": "Gestionale Iliad API",
     "version": "1.0.0",
-    "description": "RESTful API for managing orders and products in an order management system",
+    "description": "RESTful API per la gestione ordini e prodotti del Gestionale Iliad",
     "contact": {
-      "email": "admin@ordermanagement.com"
+      "email": "admin@iliad.it"
     }
   },
   "servers": [

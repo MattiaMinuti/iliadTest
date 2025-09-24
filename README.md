@@ -1,12 +1,12 @@
-# Order Management System
+# Gestionale Iliad
 
-A comprehensive web application for managing daily user orders, built with PHP Lumen backend and Vue.js frontend with Material UI components.
+Un'applicazione web completa per la gestione degli ordini quotidiani degli utenti, sviluppata con backend PHP Lumen e frontend Vue.js con componenti Vuetify.
 
 ## 🚀 Features
 
 ### Backend (PHP Lumen)
 - **RESTful API** with comprehensive CRUD operations
-- **Order Management** with filtering, search, and sorting
+- **Gestione Ordini** con filtri, ricerca e ordinamento
 - **Product Inventory** management
 - **Database Relations** between orders and products
 - **Stock Management** with automatic inventory updates
@@ -17,7 +17,7 @@ A comprehensive web application for managing daily user orders, built with PHP L
 - **Responsive Design** that works on all devices
 - **Orders Dashboard** with advanced filtering and search
 - **Detailed Order View** with associated products
-- **Order Management** - Create, edit, and delete orders
+- **Gestione Ordini** - Crea, modifica ed elimina ordini
 - **Product Management** - Manage product inventory
 - **Modern UI** with Material Design components
 - **Real-time Notifications** for user feedback

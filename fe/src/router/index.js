@@ -28,7 +28,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? `${to.meta.title} - Order Management` : 'Order Management'
+  document.title = to.meta.title ? `${to.meta.title} - Gestionale Iliad` : 'Gestionale Iliad'
   next()
 })
 

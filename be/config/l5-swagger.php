@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Order Management System API',
+                'title' => 'Gestionale Iliad API',
             ],
             'routes' => [
                 /*
