@@ -2,7 +2,7 @@
 
 ## 📋 **PANORAMICA**
 
-Il Gestionale Iliad include un sistema completo di test automatici che verifica la funzionalità degli endpoint API prima di ogni commit. Questo sistema garantisce la stabilità e l'affidabilità dell'applicazione.
+Il Gestionale Iliad include un sistema completo di test automatici basato su **PHPUnit** che verifica la funzionalità degli endpoint API prima di ogni commit. Questo sistema garantisce la stabilità e l'affidabilità dell'applicazione utilizzando lo standard de facto per i test PHP.
 
 ## 🚀 **CARATTERISTICHE**
 
@@ -12,10 +12,11 @@ Il Gestionale Iliad include un sistema completo di test automatici che verifica 
 - **Blocco commit** se i test falliscono su main
 - **Skip opzionale** con `git commit --no-verify`
 
-### 🧪 **Framework di Test Leggero**
-- **Zero dipendenze** esterne
+### 🧪 **Framework di Test PHPUnit**
+- **PHPUnit 9.0** - Standard de facto per PHP
 - **Integrato** con il progetto ottimizzato
 - **Facile manutenzione** e estensione
+- **Assertions avanzate** e reporting professionale
 
 ### 📊 **Copertura Test Completa**
 - **12 test** per endpoint API
@@ -26,13 +27,22 @@ Il Gestionale Iliad include un sistema completo di test automatici che verifica 
 
 ```
 be/tests/
-├── TestFramework.php      # Framework di test personalizzato
-├── ApiTests.php          # Test per tutti gli endpoint API
-├── run-tests.php         # Script principale per eseguire i test
+├── phpunit/              # Test PHPUnit
+│   ├── BaseApiTest.php   # Classe base per test API
+│   ├── OrderApiTest.php  # Test per endpoint ordini
+│   ├── ProductApiTest.php # Test per endpoint prodotti
+│   └── DocumentationApiTest.php # Test per documentazione
+├── bootstrap.php         # Bootstrap per PHPUnit
+├── run-phpunit-tests.php # Script per eseguire i test
 └── README.md             # Documentazione dei test
 
+be/
+├── phpunit.xml           # Configurazione PHPUnit
+└── composer.json         # Dipendenze (PHPUnit)
+
 .git/hooks/
-└── pre-commit            # Git hook per test automatici
+├── pre-commit            # Git hook per test automatici
+└── pre-push              # Git hook per push su main
 
 setup-tests.sh            # Script di configurazione
 TESTING.md               # Questa documentazione
@@ -64,9 +74,13 @@ TESTING.md               # Questa documentazione
 
 ### **Esecuzione Manuale**
 ```bash
-# Eseguire tutti i test
+# Eseguire tutti i test con PHPUnit
 cd be/tests
-php run-tests.php
+php run-phpunit-tests.php
+
+# Eseguire direttamente con PHPUnit
+cd be
+./vendor/bin/phpunit
 
 # Setup iniziale
 ./setup-tests.sh

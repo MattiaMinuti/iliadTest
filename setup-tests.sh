@@ -1,22 +1,26 @@
 #!/bin/bash
 
-# Gestionale Iliad Test Setup Script
-# This script sets up the testing environment
+# Gestionale Iliad PHPUnit Test Setup Script
+# This script sets up the PHPUnit testing environment
 
-echo "🧪 Setting up Gestionale Iliad Test Environment"
-echo "=============================================="
+echo "🧪 Setting up Gestionale Iliad PHPUnit Test Environment"
+echo "======================================================"
 
-# Make test runner executable
-chmod +x be/tests/run-tests.php
+# Make PHPUnit test runner executable
+chmod +x be/tests/run-phpunit-tests.php
 
 # Make pre-commit hook executable
 chmod +x .git/hooks/pre-commit
 
-echo "✅ Test framework setup complete!"
+# Make pre-push hook executable
+chmod +x .git/hooks/pre-push
+
+echo "✅ PHPUnit test framework setup complete!"
 echo ""
 echo "📋 Available commands:"
-echo "  - Run tests manually: cd be/tests && php run-tests.php"
-echo "  - Tests will run automatically before each commit"
+echo "  - Run tests manually: cd be/tests && php run-phpunit-tests.php"
+echo "  - Run with PHPUnit directly: cd be && ./vendor/bin/phpunit"
+echo "  - Tests will run automatically before each commit on main branch"
 echo "  - Skip tests: git commit --no-verify"
 echo ""
-echo "🚀 Ready to test!"
+echo "🚀 Ready to test with PHPUnit!"

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="12" assertions="74" errors="0" warnings="0" failures="0" skipped="0" time="0.063000">
+    <testsuite name="API Tests" tests="12" assertions="74" errors="0" warnings="0" failures="0" skipped="0" time="0.063000">
+      <testsuite name="Tests\DocumentationApiTest" file="/var/www/html/tests/phpunit/DocumentationApiTest.php" tests="2" assertions="10" errors="0" warnings="0" failures="0" skipped="0" time="0.012490">
+        <testcase name="testGetSwaggerReturnsSwaggerUi" class="Tests\DocumentationApiTest" classname="Tests.DocumentationApiTest" file="/var/www/html/tests/phpunit/DocumentationApiTest.php" line="15" assertions="3" time="0.008987"/>
+        <testcase name="testGetApiDocumentationReturnsOpenApiJson" class="Tests\DocumentationApiTest" classname="Tests.DocumentationApiTest" file="/var/www/html/tests/phpunit/DocumentationApiTest.php" line="27" assertions="7" time="0.003503"/>
+      </testsuite>
+      <testsuite name="Tests\OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" tests="7" assertions="45" errors="0" warnings="0" failures="0" skipped="0" time="0.040181">
+        <testcase name="testRootEndpointReturnsApiInfo" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="15" assertions="8" time="0.001231"/>
+        <testcase name="testGetOrdersReturnsOrdersList" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="30" assertions="8" time="0.009318"/>
+        <testcase name="testGetOrdersWithPagination" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="44" assertions="8" time="0.004378"/>
+        <testcase name="testGetOrdersWithSearchFilter" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="58" assertions="6" time="0.004128"/>
+        <testcase name="testCreateOrderWithValidData" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="70" assertions="9" time="0.013554"/>
+        <testcase name="testCreateOrderWithInsufficientStockFails" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="94" assertions="2" time="0.005378"/>
+        <testcase name="testCreateOrderWithInvalidDataFails" class="Tests\OrderApiTest" classname="Tests.OrderApiTest" file="/var/www/html/tests/phpunit/OrderApiTest.php" line="115" assertions="4" time="0.002195"/>
+      </testsuite>
+      <testsuite name="Tests\ProductApiTest" file="/var/www/html/tests/phpunit/ProductApiTest.php" tests="3" assertions="19" errors="0" warnings="0" failures="0" skipped="0" time="0.010329">
+        <testcase name="testGetProductsReturnsProductsList" class="Tests\ProductApiTest" classname="Tests.ProductApiTest" file="/var/www/html/tests/phpunit/ProductApiTest.php" line="15" assertions="7" time="0.003866"/>
+        <testcase name="testGetProductByIdReturnsSpecificProduct" class="Tests\ProductApiTest" classname="Tests.ProductApiTest" file="/var/www/html/tests/phpunit/ProductApiTest.php" line="28" assertions="8" time="0.003798"/>
+        <testcase name="testGetProductByNonExistentIdReturns404" class="Tests\ProductApiTest" classname="Tests.ProductApiTest" file="/var/www/html/tests/phpunit/ProductApiTest.php" line="42" assertions="4" time="0.002665"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
