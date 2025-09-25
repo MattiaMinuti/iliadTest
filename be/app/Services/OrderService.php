@@ -5,10 +5,8 @@ namespace App\Services;
 use App\Dao\OrderDao;
 use App\Dao\ProductDao;
 use App\Models\Order;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class OrderService extends BaseService
 {
@@ -21,7 +19,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Get orders with filters
+     * Get orders with filters.
      */
     public function getOrdersWithFilters(array $filters, int $perPage = 15): LengthAwarePaginator
     {
@@ -29,7 +27,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Get order with products
+     * Get order with products.
      */
     public function getOrderWithProducts(int $id): ?Order
     {
@@ -37,7 +35,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Create order with business logic validation
+     * Create order with business logic validation.
      */
     public function createOrder(array $orderData): Order
     {
@@ -63,7 +61,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Update order with business logic validation
+     * Update order with business logic validation.
      */
     public function updateOrder(Order $order, array $orderData): Order
     {
@@ -79,7 +77,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Delete order and restore stock
+     * Delete order and restore stock.
      */
     public function deleteOrder(Order $order): bool
     {
@@ -93,21 +91,21 @@ class OrderService extends BaseService
     }
 
     /**
-     * Validate products availability
+     * Validate products availability.
      */
     private function validateProductsAvailability(array $products): void
     {
         foreach ($products as $productData) {
             $product = $this->productDao->findByIdOrFail($productData['product_id']);
-            
-            if (!$product->hasStock($productData['quantity'])) {
+
+            if (! $product->hasStock($productData['quantity'])) {
                 throw new \Exception("Insufficient stock for product: {$product->name}");
             }
         }
     }
 
     /**
-     * Calculate total amount for products
+     * Calculate total amount for products.
      */
     private function calculateTotalAmount(array $products): float
     {
@@ -122,7 +120,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Attach products to order and reduce stock
+     * Attach products to order and reduce stock.
      */
     private function attachProductsAndReduceStock(Order $order, array $products): void
     {
@@ -130,7 +128,7 @@ class OrderService extends BaseService
 
         foreach ($products as $productData) {
             $product = $this->productDao->findByIdOrFail($productData['product_id']);
-            
+
             $productsToAttach[] = [
                 'product_id' => $product->id,
                 'quantity' => $productData['quantity'],
@@ -146,7 +144,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Update order products with validation
+     * Update order products with validation.
      */
     private function updateOrderProducts(Order $order, array $newProducts): void
     {
@@ -172,22 +170,22 @@ class OrderService extends BaseService
     }
 
     /**
-     * Validate products availability for update (considering current order stock)
+     * Validate products availability for update (considering current order stock).
      */
     private function validateProductsAvailabilityForUpdate(Order $order, array $newProducts): void
     {
         foreach ($newProducts as $productData) {
             $product = $this->productDao->findByIdOrFail($productData['product_id']);
-            
+
             // Calculate available stock (current stock + what we'll restore from this order)
             $currentOrderQuantity = 0;
             $currentProduct = $order->products->where('id', $product->id)->first();
             if ($currentProduct) {
                 $currentOrderQuantity = $currentProduct->pivot->quantity;
             }
-            
+
             $availableStock = $product->stock_quantity + $currentOrderQuantity;
-            
+
             if ($availableStock < $productData['quantity']) {
                 throw new \Exception("Insufficient stock for product: {$product->name}");
             }
@@ -195,7 +193,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Get orders by status
+     * Get orders by status.
      */
     public function getOrdersByStatus(string $status): Collection
     {
@@ -203,7 +201,7 @@ class OrderService extends BaseService
     }
 
     /**
-     * Get orders by date range
+     * Get orders by date range.
      */
     public function getOrdersByDateRange(string $startDate, string $endDate): Collection
     {

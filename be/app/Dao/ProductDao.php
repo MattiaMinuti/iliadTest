@@ -14,7 +14,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get products with filters
+     * Get products with filters.
      */
     public function getWithFilters(array $filters, int $perPage = 15): LengthAwarePaginator
     {
@@ -34,8 +34,8 @@ class ProductDao extends BaseDao
             $searchTerm = $filters['search'];
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('sku', 'like', "%{$searchTerm}%")
-                  ->orWhere('description', 'like', "%{$searchTerm}%");
+                    ->orWhere('sku', 'like', "%{$searchTerm}%")
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -48,7 +48,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get products by stock level
+     * Get products by stock level.
      */
     public function getByStockLevel(int $minStock = 0): Collection
     {
@@ -56,7 +56,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get out of stock products
+     * Get out of stock products.
      */
     public function getOutOfStock(): Collection
     {
@@ -64,17 +64,17 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get low stock products (less than threshold)
+     * Get low stock products (less than threshold).
      */
     public function getLowStock(int $threshold = 10): Collection
     {
         return $this->model->where('stock_quantity', '>', 0)
-                          ->where('stock_quantity', '<=', $threshold)
-                          ->get();
+            ->where('stock_quantity', '<=', $threshold)
+            ->get();
     }
 
     /**
-     * Find product by SKU
+     * Find product by SKU.
      */
     public function findBySku(string $sku): ?Product
     {
@@ -82,7 +82,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Update stock quantity
+     * Update stock quantity.
      */
     public function updateStock(Product $product, int $newStock): bool
     {
@@ -90,7 +90,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get products with orders relationship
+     * Get products with orders relationship.
      */
     public function getWithOrders(): Collection
     {
@@ -98,7 +98,7 @@ class ProductDao extends BaseDao
     }
 
     /**
-     * Get products that have been ordered
+     * Get products that have been ordered.
      */
     public function getOrderedProducts(): Collection
     {

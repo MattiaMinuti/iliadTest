@@ -1,39 +1,40 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
-})
+    Accept: 'application/json',
+  },
+});
 
 // Request interceptor
 api.interceptors.request.use(
-  (config) => {
-    return config
+  config => {
+    return config;
   },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 // Response interceptor
 api.interceptors.response.use(
-  (response) => {
-    return response
+  response => {
+    return response;
   },
-  (error) => {
+  error => {
     if (error.response?.status === 404) {
-      console.error('Resource not found:', error.response.config.url)
+      console.error('Resource not found:', error.response.config.url);
     } else if (error.response?.status >= 500) {
-      console.error('Server error:', error.response.data)
+      console.error('Server error:', error.response.data);
     }
-    return Promise.reject(error)
-  }
-)
+    return Promise.reject(error);
+  },
+);
 
-export default api
+export default api;

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * PHPUnit Bootstrap for Gestionale Iliad API Tests
- * 
+ * PHPUnit Bootstrap for Gestionale Iliad API Tests.
+ *
  * This file sets up the testing environment for PHPUnit
  */
 

@@ -1,13 +1,13 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import 'vuetify/styles'
-import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
-import { 
-  mdiClipboardList, 
-  mdiBrightness7, 
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import 'vuetify/styles';
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
+import {
+  mdiClipboardList,
+  mdiBrightness7,
   mdiBrightness4,
   mdiPackageVariant,
   mdiMagnify,
@@ -35,12 +35,12 @@ import {
   mdiRefresh,
   mdiCog,
   mdiDotsVertical,
-  mdiMenu
-} from '@mdi/js'
+  mdiMenu,
+} from '@mdi/js';
 
-import App from './App.vue'
-import router from './router'
-import i18n from './plugins/i18n'
+import App from './App.vue';
+import router from './router';
+import i18n from './plugins/i18n';
 
 const vuetify = createVuetify({
   components,
@@ -89,39 +89,34 @@ const vuetify = createVuetify({
     themes: {
       light: {
         colors: {
-          primary: '#E60012',        // Rosso Iliad
-          secondary: '#333333',      // Grigio scuro
-          accent: '#FF6900',         // Arancione Iliad
-          error: '#E60012',          // Rosso per errori
-          info: '#FF6900',           // Arancione per info
-          success: '#4CAF50',        // Verde per successo
-          warning: '#FF6900',        // Arancione per warning
-          background: '#FFFFFF',     // Bianco
-          surface: '#F5F5F5',        // Grigio chiaro
+          primary: '#E60012', // Rosso Iliad
+          secondary: '#333333', // Grigio scuro
+          accent: '#FF6900', // Arancione Iliad
+          error: '#E60012', // Rosso per errori
+          info: '#FF6900', // Arancione per info
+          success: '#4CAF50', // Verde per successo
+          warning: '#FF6900', // Arancione per warning
+          background: '#FFFFFF', // Bianco
+          surface: '#F5F5F5', // Grigio chiaro
         },
       },
       dark: {
         colors: {
-          primary: '#FF6900',        // Arancione per tema scuro
-          secondary: '#E0E0E0',      // Grigio chiaro
-          accent: '#E60012',         // Rosso Iliad
-          error: '#FF5252',          // Rosso chiaro per errori
-          info: '#FF6900',           // Arancione per info
-          success: '#4CAF50',        // Verde per successo
-          warning: '#FF9800',        // Arancione chiaro per warning
-          background: '#121212',     // Nero/grigio scuro
-          surface: '#1E1E1E',        // Grigio scuro per superficie
+          primary: '#FF6900', // Arancione per tema scuro
+          secondary: '#E0E0E0', // Grigio chiaro
+          accent: '#E60012', // Rosso Iliad
+          error: '#FF5252', // Rosso chiaro per errori
+          info: '#FF6900', // Arancione per info
+          success: '#4CAF50', // Verde per successo
+          warning: '#FF9800', // Arancione chiaro per warning
+          background: '#121212', // Nero/grigio scuro
+          surface: '#1E1E1E', // Grigio scuro per superficie
         },
       },
     },
   },
-})
+});
 
-const pinia = createPinia()
+const pinia = createPinia();
 
-createApp(App)
-  .use(pinia)
-  .use(router)
-  .use(vuetify)
-  .use(i18n)
-  .mount('#app')
+createApp(App).use(pinia).use(router).use(vuetify).use(i18n).mount('#app');

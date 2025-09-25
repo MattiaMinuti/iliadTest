@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class OrderApiTest extends TestCase
 {
@@ -14,7 +14,7 @@ class OrderApiTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test products
         Product::create([
             'name' => 'Test Product 1',
@@ -23,7 +23,7 @@ class OrderApiTest extends TestCase
             'sku' => 'TEST-001',
             'stock_quantity' => 100,
         ]);
-        
+
         Product::create([
             'name' => 'Test Product 2',
             'description' => 'Test description 2',
@@ -36,7 +36,7 @@ class OrderApiTest extends TestCase
     public function testCanGetOrders()
     {
         $response = $this->get('/api/v1/orders');
-        
+
         $response->assertResponseOk();
         $response->seeJsonStructure([
             'success',
@@ -44,15 +44,15 @@ class OrderApiTest extends TestCase
                 'data',
                 'total',
                 'per_page',
-                'current_page'
-            ]
+                'current_page',
+            ],
         ]);
     }
 
     public function testCanCreateOrder()
     {
         $product = Product::first();
-        
+
         $orderData = [
             'name' => 'Test Order',
             'description' => 'Test order description',
@@ -61,13 +61,13 @@ class OrderApiTest extends TestCase
             'products' => [
                 [
                     'product_id' => $product->id,
-                    'quantity' => 2
-                ]
-            ]
+                    'quantity' => 2,
+                ],
+            ],
         ];
 
         $response = $this->post('/api/v1/orders', $orderData);
-        
+
         $response->assertResponseStatus(201);
         $response->seeJsonStructure([
             'success',
@@ -79,8 +79,8 @@ class OrderApiTest extends TestCase
                 'order_date',
                 'status',
                 'total_amount',
-                'products'
-            ]
+                'products',
+            ],
         ]);
     }
 
@@ -94,7 +94,7 @@ class OrderApiTest extends TestCase
             'status' => 'pending',
             'total_amount' => 20.00,
         ]);
-        
+
         $order->products()->attach($product->id, [
             'quantity' => 2,
             'unit_price' => $product->price,
@@ -102,7 +102,7 @@ class OrderApiTest extends TestCase
         ]);
 
         $response = $this->get("/api/v1/orders/{$order->id}");
-        
+
         $response->assertResponseOk();
         $response->seeJsonStructure([
             'success',
@@ -113,8 +113,8 @@ class OrderApiTest extends TestCase
                 'order_date',
                 'status',
                 'total_amount',
-                'products'
-            ]
+                'products',
+            ],
         ]);
     }
 
@@ -135,11 +135,11 @@ class OrderApiTest extends TestCase
         ];
 
         $response = $this->put("/api/v1/orders/{$order->id}", $updateData);
-        
+
         $response->assertResponseOk();
         $response->seeJson([
             'success' => true,
-            'message' => 'Order updated successfully'
+            'message' => 'Order updated successfully',
         ]);
     }
 
@@ -154,11 +154,11 @@ class OrderApiTest extends TestCase
         ]);
 
         $response = $this->delete("/api/v1/orders/{$order->id}");
-        
+
         $response->assertResponseOk();
         $response->seeJson([
             'success' => true,
-            'message' => 'Order deleted successfully'
+            'message' => 'Order deleted successfully',
         ]);
     }
 }

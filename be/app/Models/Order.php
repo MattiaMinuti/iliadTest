@@ -26,10 +26,9 @@ class Order extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'order_products')
-                    ->withPivot('quantity', 'unit_price', 'total_price')
-                    ->withTimestamps();
+            ->withPivot('quantity', 'unit_price', 'total_price')
+            ->withTimestamps();
     }
-
 
     /**
      * Scope a query to filter orders by date range.
@@ -39,11 +38,11 @@ class Order extends Model
         if ($startDate) {
             $query->where('order_date', '>=', $startDate);
         }
-        
+
         if ($endDate) {
             $query->where('order_date', '<=', $endDate);
         }
-        
+
         return $query;
     }
 
@@ -55,10 +54,10 @@ class Order extends Model
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
-        
+
         return $query;
     }
 }

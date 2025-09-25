@@ -2,8 +2,8 @@
 
 namespace App\Dao;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseDao
@@ -16,7 +16,7 @@ abstract class BaseDao
     }
 
     /**
-     * Find a model by ID
+     * Find a model by ID.
      */
     public function findById(int $id): ?Model
     {
@@ -24,7 +24,7 @@ abstract class BaseDao
     }
 
     /**
-     * Find a model by ID or fail
+     * Find a model by ID or fail.
      */
     public function findByIdOrFail(int $id): Model
     {
@@ -32,7 +32,7 @@ abstract class BaseDao
     }
 
     /**
-     * Get all models
+     * Get all models.
      */
     public function getAll(): Collection
     {
@@ -40,7 +40,7 @@ abstract class BaseDao
     }
 
     /**
-     * Create a new model
+     * Create a new model.
      */
     public function create(array $data): Model
     {
@@ -48,7 +48,7 @@ abstract class BaseDao
     }
 
     /**
-     * Update a model
+     * Update a model.
      */
     public function update(Model $model, array $data): bool
     {
@@ -56,7 +56,7 @@ abstract class BaseDao
     }
 
     /**
-     * Delete a model
+     * Delete a model.
      */
     public function delete(Model $model): bool
     {
@@ -64,7 +64,7 @@ abstract class BaseDao
     }
 
     /**
-     * Paginate models
+     * Paginate models.
      */
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
@@ -72,7 +72,7 @@ abstract class BaseDao
     }
 
     /**
-     * Get models with relationships
+     * Get models with relationships.
      */
     public function getWithRelations(array $relations): Collection
     {
@@ -80,12 +80,12 @@ abstract class BaseDao
     }
 
     /**
-     * Find models with conditions
+     * Find models with conditions.
      */
     public function findBy(array $conditions): Collection
     {
         $query = $this->model->newQuery();
-        
+
         foreach ($conditions as $field => $value) {
             if (is_array($value)) {
                 $query->whereIn($field, $value);
@@ -93,7 +93,7 @@ abstract class BaseDao
                 $query->where($field, $value);
             }
         }
-        
+
         return $query->get();
     }
 }

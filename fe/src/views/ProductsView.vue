@@ -2,7 +2,9 @@
   <div>
     <v-row class="mb-4">
       <v-col>
-        <h1 class="text-h4 font-weight-bold mb-2">{{ $t('products.title') }}</h1>
+        <h1 class="text-h4 font-weight-bold mb-2">
+          {{ $t('products.title') }}
+        </h1>
         <p class="text-subtitle-1 text-medium-emphasis">
           {{ $t('products.subtitle') }}
         </p>
@@ -10,10 +12,16 @@
     </v-row>
 
     <!-- Filters and Search -->
-    <v-card class="mb-4" elevation="1">
+    <v-card
+      class="mb-4"
+      elevation="1"
+    >
       <v-card-text>
         <v-row>
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-text-field
               v-model="filters.search"
               :label="$t('products.searchPlaceholder')"
@@ -24,7 +32,10 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.inStock"
               :items="stockOptions"
@@ -35,7 +46,10 @@
               @update:model-value="loadProducts"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="sortBy"
               :items="sortOptions"
@@ -45,14 +59,19 @@
               @update:model-value="loadProducts"
             />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col
+            cols="12"
+            md="2"
+          >
             <v-btn
               color="primary"
               variant="elevated"
               block
               @click="openCreateDialog"
             >
-              <v-icon start>$plus</v-icon>
+              <v-icon start>
+                $plus
+              </v-icon>
               {{ $t('products.newProduct') }}
             </v-btn>
           </v-col>
@@ -73,17 +92,20 @@
         item-value="id"
         @update:options="loadProducts"
       >
-        <template v-slot:item.sku="{ item }">
-          <v-chip size="small" variant="outlined">
+        <template #item.sku="{ item }">
+          <v-chip
+            size="small"
+            variant="outlined"
+          >
             {{ item.sku }}
           </v-chip>
         </template>
 
-        <template v-slot:item.price="{ item }">
+        <template #item.price="{ item }">
           ${{ parseFloat(item.price).toFixed(2) }}
         </template>
 
-        <template v-slot:item.stock_quantity="{ item }">
+        <template #item.stock_quantity="{ item }">
           <v-chip
             :color="item.stock_quantity > 0 ? 'success' : 'error'"
             size="small"
@@ -93,7 +115,7 @@
           </v-chip>
         </template>
 
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-btn
             icon
             size="small"
@@ -101,7 +123,12 @@
             @click="editProduct(item)"
           >
             <v-icon>$pencil</v-icon>
-            <v-tooltip activator="parent" location="top">Edit</v-tooltip>
+            <v-tooltip
+              activator="parent"
+              location="top"
+            >
+              Edit
+            </v-tooltip>
           </v-btn>
           <v-btn
             icon
@@ -111,7 +138,12 @@
             @click="deleteProduct(item)"
           >
             <v-icon>$delete</v-icon>
-            <v-tooltip activator="parent" location="top">Delete</v-tooltip>
+            <v-tooltip
+              activator="parent"
+              location="top"
+            >
+              Delete
+            </v-tooltip>
           </v-btn>
         </template>
       </v-data-table-server>
@@ -125,13 +157,23 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          {{ productDialog.mode === 'create' ? $t('productDialog.createTitle') : $t('productDialog.editTitle') }}
+          {{
+            productDialog.mode === 'create'
+              ? $t('productDialog.createTitle')
+              : $t('productDialog.editTitle')
+          }}
         </v-card-title>
 
-        <v-form ref="form" @submit.prevent="saveProduct">
+        <v-form
+          ref="form"
+          @submit.prevent="saveProduct"
+        >
           <v-card-text>
             <v-row>
-              <v-col cols="12" md="6">
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model="productDialog.product.name"
                   :label="$t('productDialog.productName') + ' *'"
@@ -140,7 +182,10 @@
                   required
                 />
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model="productDialog.product.sku"
                   :label="$t('orderDetail.sku') + ' *'"
@@ -152,7 +197,10 @@
             </v-row>
 
             <v-row>
-              <v-col cols="12" md="6">
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model.number="productDialog.product.price"
                   :label="$t('productDialog.price') + ' *'"
@@ -165,7 +213,10 @@
                   required
                 />
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col
+                cols="12"
+                md="6"
+              >
                 <v-text-field
                   v-model.number="productDialog.product.stock_quantity"
                   :label="$t('productDialog.stockQuantity') + ' *'"
@@ -203,7 +254,11 @@
               type="submit"
               :loading="productDialog.saving"
             >
-              {{ productDialog.mode === 'create' ? $t('productDialog.createProduct') : $t('productDialog.updateProduct') }}
+              {{
+                productDialog.mode === 'create'
+                  ? $t('productDialog.createProduct')
+                  : $t('productDialog.updateProduct')
+              }}
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -218,7 +273,11 @@
       <v-card>
         <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
-          {{ $t('confirmations.deleteProduct', { name: deleteDialog.product?.name }) }}
+          {{
+            $t('confirmations.deleteProduct', {
+              name: deleteDialog.product?.name,
+            })
+          }}
           {{ $t('confirmations.deleteWarning') }}
         </v-card-text>
         <v-card-actions>
@@ -244,30 +303,30 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { productService } from '@/services/products'
-import { useNotificationStore } from '@/stores/notification'
-import { showApiError } from '@/utils/errorHandler'
+import { ref, reactive, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { productService } from '@/services/products';
+import { useNotificationStore } from '@/stores/notification';
+import { showApiError } from '@/utils/errorHandler';
 
 export default {
   name: 'ProductsView',
   setup() {
-    const notificationStore = useNotificationStore()
-    const { t } = useI18n()
-    const form = ref(null)
+    const notificationStore = useNotificationStore();
+    const { t } = useI18n();
+    const form = ref(null);
 
-    const loading = ref(false)
-    const products = ref([])
-    const totalItems = ref(0)
-    const page = ref(1)
-    const itemsPerPage = ref(15)
-    const sortBy = ref('name')
+    const loading = ref(false);
+    const products = ref([]);
+    const totalItems = ref(0);
+    const page = ref(1);
+    const itemsPerPage = ref(15);
+    const sortBy = ref('name');
 
     const filters = reactive({
       search: '',
-      inStock: null
-    })
+      inStock: null,
+    });
 
     const productDialog = reactive({
       show: false,
@@ -278,71 +337,81 @@ export default {
         description: '',
         price: 0,
         sku: '',
-        stock_quantity: 0
-      }
-    })
+        stock_quantity: 0,
+      },
+    });
 
     const deleteDialog = reactive({
       show: false,
       product: null,
-      loading: false
-    })
+      loading: false,
+    });
 
     const headers = computed(() => [
       { title: t('products.productName'), key: 'name', sortable: true },
       { title: t('orderDetail.sku'), key: 'sku', sortable: true },
       { title: t('products.price'), key: 'price', sortable: true },
       { title: t('products.stock'), key: 'stock_quantity', sortable: true },
-      { title: t('orders.actions'), key: 'actions', sortable: false, width: '120px' }
-    ])
+      {
+        title: t('orders.actions'),
+        key: 'actions',
+        sortable: false,
+        width: '120px',
+      },
+    ]);
 
     const stockOptions = computed(() => [
       { title: t('stockStatus.inStock'), value: true },
-      { title: t('stockStatus.outOfStock'), value: false }
-    ])
+      { title: t('stockStatus.outOfStock'), value: false },
+    ]);
 
     const sortOptions = computed(() => [
       { title: t('sortOptions.name'), value: 'name' },
       { title: t('sortOptions.price'), value: 'price' },
       { title: t('sortOptions.stock'), value: 'stock_quantity' },
-      { title: t('sortOptions.sku'), value: 'sku' }
-    ])
+      { title: t('sortOptions.sku'), value: 'sku' },
+    ]);
 
     const rules = {
-      required: (value) => !!value || t('validation.required'),
-      minPrice: (value) => value >= 0 || t('validation.minPrice'),
-      minStock: (value) => value >= 0 || t('validation.minStock')
-    }
+      required: value => !!value || t('validation.required'),
+      minPrice: value => value >= 0 || t('validation.minPrice'),
+      minStock: value => value >= 0 || t('validation.minStock'),
+    };
 
-    let searchTimeout = null
+    let searchTimeout = null;
     const debouncedSearch = () => {
-      clearTimeout(searchTimeout)
+      clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
-        loadProducts()
-      }, 500)
-    }
+        loadProducts();
+      }, 500);
+    };
 
     const loadProducts = async () => {
-      loading.value = true
+      loading.value = true;
       try {
         const params = {
           page: page.value,
           per_page: itemsPerPage.value,
           search: filters.search || undefined,
           in_stock: filters.inStock !== null ? filters.inStock : undefined,
-          sort_by: sortBy.value
-        }
+          sort_by: sortBy.value,
+        };
 
-        const response = await productService.getProducts(params)
-        products.value = response.data.data
-        totalItems.value = response.data.total
+        const response = await productService.getProducts(params);
+        products.value = response.data.data;
+        totalItems.value = response.data.total;
       } catch (error) {
-        console.error('Error loading products:', error)
-        showApiError(notificationStore, error, t, 'messages.loadProductsFailed')
+        console.error('Error loading products:', error);
+        showApiError(
+          notificationStore,
+          error,
+          t,
+          'messages.loadProductsFailed',
+        );
       } finally {
-        loading.value = false
+        loading.value = false;
       }
-    }
+    };
 
     const openCreateDialog = () => {
       productDialog.product = {
@@ -350,65 +419,73 @@ export default {
         description: '',
         price: 0,
         sku: '',
-        stock_quantity: 0
-      }
-      productDialog.mode = 'create'
-      productDialog.show = true
-    }
+        stock_quantity: 0,
+      };
+      productDialog.mode = 'create';
+      productDialog.show = true;
+    };
 
-    const editProduct = (product) => {
-      productDialog.product = { ...product }
-      productDialog.mode = 'edit'
-      productDialog.show = true
-    }
+    const editProduct = product => {
+      productDialog.product = { ...product };
+      productDialog.mode = 'edit';
+      productDialog.show = true;
+    };
 
     const saveProduct = async () => {
-      const { valid } = await form.value.validate()
-      if (!valid) return
+      const { valid } = await form.value.validate();
+      if (!valid) return;
 
-      productDialog.saving = true
+      productDialog.saving = true;
       try {
         if (productDialog.mode === 'create') {
-          await productService.createProduct(productDialog.product)
-          notificationStore.showSuccess(t('messages.productCreated'))
+          await productService.createProduct(productDialog.product);
+          notificationStore.showSuccess(t('messages.productCreated'));
         } else {
-          await productService.updateProduct(productDialog.product.id, productDialog.product)
-          notificationStore.showSuccess(t('messages.productUpdated'))
+          await productService.updateProduct(
+            productDialog.product.id,
+            productDialog.product,
+          );
+          notificationStore.showSuccess(t('messages.productUpdated'));
         }
 
-        productDialog.show = false
-        loadProducts()
+        productDialog.show = false;
+        loadProducts();
       } catch (error) {
-        console.error('Error saving product:', error)
-        showApiError(notificationStore, error, t, 'messages.saveProductFailed')
+        console.error('Error saving product:', error);
+        showApiError(notificationStore, error, t, 'messages.saveProductFailed');
       } finally {
-        productDialog.saving = false
+        productDialog.saving = false;
       }
-    }
+    };
 
-    const deleteProduct = (product) => {
-      deleteDialog.product = product
-      deleteDialog.show = true
-    }
+    const deleteProduct = product => {
+      deleteDialog.product = product;
+      deleteDialog.show = true;
+    };
 
     const confirmDelete = async () => {
-      deleteDialog.loading = true
+      deleteDialog.loading = true;
       try {
-        await productService.deleteProduct(deleteDialog.product.id)
-        notificationStore.showSuccess(t('messages.productDeleted'))
-        deleteDialog.show = false
-        loadProducts()
+        await productService.deleteProduct(deleteDialog.product.id);
+        notificationStore.showSuccess(t('messages.productDeleted'));
+        deleteDialog.show = false;
+        loadProducts();
       } catch (error) {
-        console.error('Error deleting product:', error)
-        showApiError(notificationStore, error, t, 'messages.deleteProductFailed')
+        console.error('Error deleting product:', error);
+        showApiError(
+          notificationStore,
+          error,
+          t,
+          'messages.deleteProductFailed',
+        );
       } finally {
-        deleteDialog.loading = false
+        deleteDialog.loading = false;
       }
-    }
+    };
 
     onMounted(() => {
-      loadProducts()
-    })
+      loadProducts();
+    });
 
     return {
       loading,
@@ -431,10 +508,10 @@ export default {
       editProduct,
       saveProduct,
       deleteProduct,
-      confirmDelete
-    }
-  }
-}
+      confirmDelete,
+    };
+  },
+};
 </script>
 
 <style scoped>

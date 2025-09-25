@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import OrdersView from '@/views/OrdersView.vue'
-import OrderDetailView from '@/views/OrderDetailView.vue'
-import ProductsView from '@/views/ProductsView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import OrdersView from '@/views/OrdersView.vue';
+import OrderDetailView from '@/views/OrderDetailView.vue';
+import ProductsView from '@/views/ProductsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,26 +10,28 @@ const router = createRouter({
       path: '/',
       name: 'orders',
       component: OrdersView,
-      meta: { title: 'Orders' }
+      meta: { title: 'Orders' },
     },
     {
       path: '/orders/:id',
       name: 'order-detail',
       component: OrderDetailView,
-      meta: { title: 'Order Details' }
+      meta: { title: 'Order Details' },
     },
     {
       path: '/products',
       name: 'products',
       component: ProductsView,
-      meta: { title: 'Products' }
-    }
-  ]
-})
+      meta: { title: 'Products' },
+    },
+  ],
+});
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? `${to.meta.title} - Gestionale Iliad` : 'Gestionale Iliad'
-  next()
-})
+  document.title = to.meta.title
+    ? `${to.meta.title} - Gestionale Iliad`
+    : 'Gestionale Iliad';
+  next();
+});
 
-export default router
+export default router;

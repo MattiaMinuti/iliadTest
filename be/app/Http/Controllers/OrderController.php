@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\OrderService;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -16,6 +16,7 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
     }
+
     /**
      * Display a listing of orders with optional filtering and search.
      */
@@ -77,7 +78,6 @@ class OrderController extends Controller
                 'message' => 'Order created successfully',
                 'data' => $order,
             ], 201);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -101,7 +101,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->getOrderWithProducts($id);
 
-            if (!$order) {
+            if (! $order) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Order not found',
@@ -139,7 +139,7 @@ class OrderController extends Controller
             ]);
 
             $orderData = $request->only(['name', 'description', 'order_date', 'status']);
-            
+
             if ($request->has('products')) {
                 $orderData['products'] = $request->products;
             }
@@ -151,7 +151,6 @@ class OrderController extends Controller
                 'message' => 'Order updated successfully',
                 'data' => $order,
             ]);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -185,7 +184,6 @@ class OrderController extends Controller
                 'success' => true,
                 'message' => 'Order deleted successfully',
             ]);
-
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,

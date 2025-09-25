@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Dao\BaseDao;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseService
@@ -17,7 +17,7 @@ abstract class BaseService
     }
 
     /**
-     * Get all records
+     * Get all records.
      */
     public function getAll(): Collection
     {
@@ -25,7 +25,7 @@ abstract class BaseService
     }
 
     /**
-     * Find by ID
+     * Find by ID.
      */
     public function findById(int $id): ?Model
     {
@@ -33,7 +33,7 @@ abstract class BaseService
     }
 
     /**
-     * Find by ID or fail
+     * Find by ID or fail.
      */
     public function findByIdOrFail(int $id): Model
     {
@@ -41,7 +41,7 @@ abstract class BaseService
     }
 
     /**
-     * Create new record
+     * Create new record.
      */
     public function create(array $data): Model
     {
@@ -49,7 +49,7 @@ abstract class BaseService
     }
 
     /**
-     * Update record
+     * Update record.
      */
     public function update(Model $model, array $data): bool
     {
@@ -57,7 +57,7 @@ abstract class BaseService
     }
 
     /**
-     * Delete record
+     * Delete record.
      */
     public function delete(Model $model): bool
     {
@@ -65,7 +65,7 @@ abstract class BaseService
     }
 
     /**
-     * Paginate records
+     * Paginate records.
      */
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {

@@ -12,7 +12,10 @@
       </v-col>
     </v-row>
 
-    <div v-if="loading" class="text-center py-8">
+    <div
+      v-if="loading"
+      class="text-center py-8"
+    >
       <v-progress-circular
         indeterminate
         color="primary"
@@ -22,16 +25,31 @@
 
     <div v-else-if="order">
       <!-- Order Header -->
-      <v-card class="mb-4" elevation="1">
+      <v-card
+        class="mb-4"
+        elevation="1"
+      >
         <v-card-text>
           <v-row>
-            <v-col cols="12" md="8">
-              <h1 class="text-h4 font-weight-bold mb-2">{{ order.name }}</h1>
-              <p v-if="order.description" class="text-subtitle-1 text-medium-emphasis">
+            <v-col
+              cols="12"
+              md="8"
+            >
+              <h1 class="text-h4 font-weight-bold mb-2">
+                {{ order.name }}
+              </h1>
+              <p
+                v-if="order.description"
+                class="text-subtitle-1 text-medium-emphasis"
+              >
                 {{ order.description }}
               </p>
             </v-col>
-            <v-col cols="12" md="4" class="text-md-right">
+            <v-col
+              cols="12"
+              md="4"
+              class="text-md-right"
+            >
               <v-chip
                 :color="getStatusColor(order.status)"
                 size="large"
@@ -50,24 +68,35 @@
 
       <!-- Order Information -->
       <v-row class="mb-4">
-        <v-col cols="12" md="6">
+        <v-col
+          cols="12"
+          md="6"
+        >
           <v-card elevation="1">
-            <v-card-title>{{ $t('orderDetail.orderInformation') }}</v-card-title>
+            <v-card-title>
+              {{ $t('orderDetail.orderInformation') }}
+            </v-card-title>
             <v-card-text>
               <v-list lines="two">
                 <v-list-item>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>$calendar</v-icon>
                   </template>
-                  <v-list-item-title>{{ $t('orderDetail.orderDate') }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ formatDate(order.order_date) }}</v-list-item-subtitle>
+                  <v-list-item-title>
+                    {{ $t('orderDetail.orderDate') }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ formatDate(order.order_date) }}
+                  </v-list-item-subtitle>
                 </v-list-item>
-                
+
                 <v-list-item>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>$flag</v-icon>
                   </template>
-                  <v-list-item-title>{{ $t('orders.status') }}</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('orders.status') }}
+                  </v-list-item-title>
                   <v-list-item-subtitle>
                     <v-chip
                       :color="getStatusColor(order.status)"
@@ -80,22 +109,32 @@
                 </v-list-item>
 
                 <v-list-item>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>$currencyUsd</v-icon>
                   </template>
-                  <v-list-item-title>{{ $t('orderDetail.totalAmount') }}</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('orderDetail.totalAmount') }}
+                  </v-list-item-title>
                   <v-list-item-subtitle class="text-h6 font-weight-bold">
                     ${{ parseFloat(order.total_amount).toFixed(2) }}
                   </v-list-item-subtitle>
                 </v-list-item>
 
                 <v-list-item>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>$packageVariant</v-icon>
                   </template>
-                  <v-list-item-title>{{ $t('orderDetail.totalItems') }}</v-list-item-title>
+                  <v-list-item-title>
+                    {{ $t('orderDetail.totalItems') }}
+                  </v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ order.products?.reduce((sum, p) => sum + p.pivot.quantity, 0) || 0 }} {{ $t('orderDetail.items') }}
+                    {{
+                      order.products?.reduce(
+                        (sum, p) => sum + p.pivot.quantity,
+                        0
+                      ) || 0
+                    }}
+                    {{ $t('orderDetail.items') }}
                   </v-list-item-subtitle>
                 </v-list-item>
               </v-list>
@@ -103,7 +142,10 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6">
+        <v-col
+          cols="12"
+          md="6"
+        >
           <v-card elevation="1">
             <v-card-title>{{ $t('orderDetail.actions') }}</v-card-title>
             <v-card-text>
@@ -117,7 +159,7 @@
               >
                 {{ $t('orderDetail.editOrder') }}
               </v-btn>
-              
+
               <v-btn
                 color="error"
                 variant="outlined"
@@ -135,10 +177,12 @@
       <!-- Order Products -->
       <v-card elevation="1">
         <v-card-title>
-          <v-icon class="mr-2">$packageVariant</v-icon>
+          <v-icon class="mr-2">
+            $packageVariant
+          </v-icon>
           {{ $t('orderDetail.orderProducts') }}
         </v-card-title>
-        
+
         <v-card-text v-if="!order.products || order.products.length === 0">
           <v-alert
             type="info"
@@ -154,9 +198,15 @@
             <tr>
               <th>{{ $t('orderDetail.productName') }}</th>
               <th>{{ $t('orderDetail.sku') }}</th>
-              <th class="text-right">{{ $t('orderDetail.unitPrice') }}</th>
-              <th class="text-right">{{ $t('orderDetail.quantity') }}</th>
-              <th class="text-right">{{ $t('orderDetail.totalPrice') }}</th>
+              <th class="text-right">
+                {{ $t('orderDetail.unitPrice') }}
+              </th>
+              <th class="text-right">
+                {{ $t('orderDetail.quantity') }}
+              </th>
+              <th class="text-right">
+                {{ $t('orderDetail.totalPrice') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -165,13 +215,21 @@
               :key="product.id"
             >
               <td>
-                <div class="font-weight-medium">{{ product.name }}</div>
-                <div v-if="product.description" class="text-caption text-medium-emphasis">
+                <div class="font-weight-medium">
+                  {{ product.name }}
+                </div>
+                <div
+                  v-if="product.description"
+                  class="text-caption text-medium-emphasis"
+                >
                   {{ product.description }}
                 </div>
               </td>
               <td>
-                <v-chip size="small" variant="outlined">
+                <v-chip
+                  size="small"
+                  variant="outlined"
+                >
                   {{ product.sku }}
                 </v-chip>
               </td>
@@ -179,7 +237,11 @@
                 ${{ parseFloat(product.pivot.unit_price).toFixed(2) }}
               </td>
               <td class="text-right">
-                <v-chip size="small" color="primary" variant="tonal">
+                <v-chip
+                  size="small"
+                  color="primary"
+                  variant="tonal"
+                >
                   {{ product.pivot.quantity }}
                 </v-chip>
               </td>
@@ -190,7 +252,12 @@
           </tbody>
           <tfoot>
             <tr class="font-weight-bold">
-              <td colspan="4" class="text-right">{{ $t('orders.total') }}:</td>
+              <td
+                colspan="4"
+                class="text-right"
+              >
+                {{ $t('orders.total') }}:
+              </td>
               <td class="text-right text-h6">
                 ${{ parseFloat(order.total_amount).toFixed(2) }}
               </td>
@@ -200,9 +267,19 @@
       </v-card>
     </div>
 
-    <div v-else class="text-center py-8">
-      <v-icon size="64" color="grey">mdi-alert-circle</v-icon>
-      <h2 class="text-h5 mt-4">Order Not Found</h2>
+    <div
+      v-else
+      class="text-center py-8"
+    >
+      <v-icon
+        size="64"
+        color="grey"
+      >
+        mdi-alert-circle
+      </v-icon>
+      <h2 class="text-h5 mt-4">
+        Order Not Found
+      </h2>
       <p class="text-subtitle-1 text-medium-emphasis">
         The requested order could not be found.
       </p>
@@ -250,100 +327,100 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { orderService } from '@/services/orders'
-import { useNotificationStore } from '@/stores/notification'
-import { showApiError } from '@/utils/errorHandler'
-import OrderDialog from '@/components/OrderDialog.vue'
+import { ref, reactive, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { orderService } from '@/services/orders';
+import { useNotificationStore } from '@/stores/notification';
+import { showApiError } from '@/utils/errorHandler';
+import OrderDialog from '@/components/OrderDialog.vue';
 
 export default {
   name: 'OrderDetailView',
   components: {
-    OrderDialog
+    OrderDialog,
   },
   setup() {
-    const route = useRoute()
-    const router = useRouter()
-    const notificationStore = useNotificationStore()
-    const { t } = useI18n()
+    const route = useRoute();
+    const router = useRouter();
+    const notificationStore = useNotificationStore();
+    const { t } = useI18n();
 
-    const loading = ref(true)
-    const order = ref(null)
+    const loading = ref(true);
+    const order = ref(null);
 
     const orderDialog = reactive({
       show: false,
       order: null,
-      mode: 'edit'
-    })
+      mode: 'edit',
+    });
 
     const deleteDialog = reactive({
       show: false,
-      loading: false
-    })
+      loading: false,
+    });
 
     const loadOrder = async () => {
-      loading.value = true
+      loading.value = true;
       try {
-        const response = await orderService.getOrder(route.params.id)
-        order.value = response.data
+        const response = await orderService.getOrder(route.params.id);
+        order.value = response.data;
       } catch (error) {
-        console.error('Error loading order:', error)
-        showApiError(notificationStore, error, t, 'messages.loadOrdersFailed')
+        console.error('Error loading order:', error);
+        showApiError(notificationStore, error, t, 'messages.loadOrdersFailed');
       } finally {
-        loading.value = false
+        loading.value = false;
       }
-    }
+    };
 
-    const formatDate = (date) => {
-      return new Date(date).toLocaleDateString()
-    }
+    const formatDate = date => {
+      return new Date(date).toLocaleDateString();
+    };
 
-    const getStatusColor = (status) => {
+    const getStatusColor = status => {
       const colors = {
         pending: 'orange',
         processing: 'blue',
         completed: 'success',
-        cancelled: 'error'
-      }
-      return colors[status] || 'grey'
-    }
+        cancelled: 'error',
+      };
+      return colors[status] || 'grey';
+    };
 
     const editOrder = () => {
-      orderDialog.order = { ...order.value }
-      orderDialog.mode = 'edit'
-      orderDialog.show = true
-    }
+      orderDialog.order = { ...order.value };
+      orderDialog.mode = 'edit';
+      orderDialog.show = true;
+    };
 
     const deleteOrder = () => {
-      deleteDialog.show = true
-    }
+      deleteDialog.show = true;
+    };
 
     const confirmDelete = async () => {
-      deleteDialog.loading = true
+      deleteDialog.loading = true;
       try {
-        await orderService.deleteOrder(order.value.id)
-        notificationStore.showSuccess(t('messages.orderDeleted'))
-        router.push('/')
+        await orderService.deleteOrder(order.value.id);
+        notificationStore.showSuccess(t('messages.orderDeleted'));
+        router.push('/');
       } catch (error) {
-        console.error('Error deleting order:', error)
-        showApiError(notificationStore, error, t, 'messages.deleteOrderFailed')
+        console.error('Error deleting order:', error);
+        showApiError(notificationStore, error, t, 'messages.deleteOrderFailed');
       } finally {
-        deleteDialog.loading = false
-        deleteDialog.show = false
+        deleteDialog.loading = false;
+        deleteDialog.show = false;
       }
-    }
+    };
 
     const onOrderSaved = () => {
-      orderDialog.show = false
-      loadOrder()
-      notificationStore.showSuccess(t('messages.orderUpdated'))
-    }
+      orderDialog.show = false;
+      loadOrder();
+      notificationStore.showSuccess(t('messages.orderUpdated'));
+    };
 
     onMounted(() => {
-      loadOrder()
-    })
+      loadOrder();
+    });
 
     return {
       loading,
@@ -355,10 +432,10 @@ export default {
       editOrder,
       deleteOrder,
       confirmDelete,
-      onOrderSaved
-    }
-  }
-}
+      onOrderSaved,
+    };
+  },
+};
 </script>
 
 <style scoped>

@@ -15,7 +15,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get products with filters
+     * Get products with filters.
      */
     public function getProductsWithFilters(array $filters, int $perPage = 15): LengthAwarePaginator
     {
@@ -23,7 +23,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Create product with validation
+     * Create product with validation.
      */
     public function createProduct(array $productData): Product
     {
@@ -36,7 +36,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Update product with validation
+     * Update product with validation.
      */
     public function updateProduct(Product $product, array $productData): Product
     {
@@ -53,25 +53,25 @@ class ProductService extends BaseService
     }
 
     /**
-     * Delete product with validation
+     * Delete product with validation.
      */
     public function deleteProduct(Product $product): bool
     {
         // Check if product is associated with any orders
         if ($product->orders()->exists()) {
-            throw new \Exception("Cannot delete product that is associated with orders");
+            throw new \Exception('Cannot delete product that is associated with orders');
         }
 
         return $this->dao->delete($product);
     }
 
     /**
-     * Update product stock
+     * Update product stock.
      */
     public function updateStock(Product $product, int $newStock): Product
     {
         if ($newStock < 0) {
-            throw new \Exception("Stock quantity cannot be negative");
+            throw new \Exception('Stock quantity cannot be negative');
         }
 
         $this->dao->updateStock($product, $newStock);
@@ -79,41 +79,41 @@ class ProductService extends BaseService
     }
 
     /**
-     * Reduce product stock
+     * Reduce product stock.
      */
     public function reduceStock(Product $product, int $quantity): Product
     {
         if ($quantity <= 0) {
-            throw new \Exception("Quantity must be greater than 0");
+            throw new \Exception('Quantity must be greater than 0');
         }
 
-        if (!$product->hasStock($quantity)) {
+        if (! $product->hasStock($quantity)) {
             throw new \Exception("Insufficient stock for product: {$product->name}");
         }
 
         $newStock = $product->stock_quantity - $quantity;
         $this->dao->updateStock($product, $newStock);
-        
+
         return $product->fresh();
     }
 
     /**
-     * Increase product stock
+     * Increase product stock.
      */
     public function increaseStock(Product $product, int $quantity): Product
     {
         if ($quantity <= 0) {
-            throw new \Exception("Quantity must be greater than 0");
+            throw new \Exception('Quantity must be greater than 0');
         }
 
         $newStock = $product->stock_quantity + $quantity;
         $this->dao->updateStock($product, $newStock);
-        
+
         return $product->fresh();
     }
 
     /**
-     * Get products by stock level
+     * Get products by stock level.
      */
     public function getProductsByStockLevel(int $minStock = 0): Collection
     {
@@ -121,7 +121,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get out of stock products
+     * Get out of stock products.
      */
     public function getOutOfStockProducts(): Collection
     {
@@ -129,7 +129,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get low stock products
+     * Get low stock products.
      */
     public function getLowStockProducts(int $threshold = 10): Collection
     {
@@ -137,7 +137,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get products with orders
+     * Get products with orders.
      */
     public function getProductsWithOrders(): Collection
     {
@@ -145,7 +145,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get ordered products
+     * Get ordered products.
      */
     public function getOrderedProducts(): Collection
     {
@@ -153,7 +153,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Check if product has sufficient stock
+     * Check if product has sufficient stock.
      */
     public function hasStock(Product $product, int $quantity): bool
     {
@@ -161,7 +161,7 @@ class ProductService extends BaseService
     }
 
     /**
-     * Get product by SKU
+     * Get product by SKU.
      */
     public function getProductBySku(string $sku): ?Product
     {

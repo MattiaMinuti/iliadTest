@@ -7,22 +7,30 @@
       elevation="1"
       height="64"
     >
-          <v-app-bar-title class="font-weight-bold">
-            <v-icon class="mr-2" size="28">$clipboardList</v-icon>
-            <span class="text-h5">{{ $t('app.title') }}</span>
-          </v-app-bar-title>
-      
-      <v-spacer></v-spacer>
-      
+      <v-app-bar-title class="font-weight-bold">
+        <v-icon
+          class="mr-2"
+          size="28"
+        >
+          $clipboardList
+        </v-icon>
+        <span class="text-h5">{{ $t('app.title') }}</span>
+      </v-app-bar-title>
+
+      <v-spacer />
+
       <LanguageSwitcher class="mr-2" />
-      
+
       <v-btn
         icon
         variant="text"
         @click="toggleTheme"
       >
         <v-icon>{{ isDark ? '$brightness7' : '$brightness4' }}</v-icon>
-        <v-tooltip activator="parent" location="bottom">
+        <v-tooltip
+          activator="parent"
+          location="bottom"
+        >
           {{ $t('app.toggleTheme') }}
         </v-tooltip>
       </v-btn>
@@ -40,7 +48,7 @@
           :to="item.route"
           link
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-icon>{{ item.icon }}</v-icon>
           </template>
           <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
@@ -61,7 +69,7 @@
       location="top right"
     >
       {{ snackbar.message }}
-      <template v-slot:actions>
+      <template #actions>
         <v-btn
           variant="text"
           @click="snackbar.show = false"
@@ -74,44 +82,46 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
-import { useTheme } from 'vuetify'
-import { useNotificationStore } from '@/stores/notification'
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
+import { ref, computed } from 'vue';
+import { useTheme } from 'vuetify';
+import { useNotificationStore } from '@/stores/notification';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 export default {
   name: 'App',
   components: {
-    LanguageSwitcher
+    LanguageSwitcher,
   },
   setup() {
-    const theme = useTheme()
-    const notificationStore = useNotificationStore()
-    
-    const drawer = ref(false)
-    
+    const theme = useTheme();
+    const notificationStore = useNotificationStore();
+
+    const drawer = ref(false);
+
     const menuItems = [
       { title: 'nav.orders', icon: '$clipboardList', route: '/' },
       { title: 'nav.products', icon: '$packageVariant', route: '/products' },
-    ]
-    
-    const isDark = computed(() => theme.global.name.value === 'dark')
-    
+    ];
+
+    const isDark = computed(() => theme.global.name.value === 'dark');
+
     const toggleTheme = () => {
-      theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-    }
-    
-    const snackbar = computed(() => notificationStore.snackbar)
-    
+      theme.global.name.value = theme.global.current.value.dark
+        ? 'light'
+        : 'dark';
+    };
+
+    const snackbar = computed(() => notificationStore.snackbar);
+
     return {
       drawer,
       menuItems,
       isDark,
       toggleTheme,
       snackbar,
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style scoped>

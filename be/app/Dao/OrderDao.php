@@ -14,7 +14,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get orders with products relationship
+     * Get orders with products relationship.
      */
     public function getWithProducts(): Collection
     {
@@ -22,7 +22,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get order by ID with products
+     * Get order by ID with products.
      */
     public function findByIdWithProducts(int $id): ?Order
     {
@@ -30,7 +30,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get orders with filters
+     * Get orders with filters.
      */
     public function getWithFilters(array $filters, int $perPage = 15): LengthAwarePaginator
     {
@@ -55,7 +55,7 @@ class OrderDao extends BaseDao
             $searchTerm = $filters['search'];
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('description', 'like', "%{$searchTerm}%");
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -68,7 +68,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Attach products to order
+     * Attach products to order.
      */
     public function attachProducts(Order $order, array $products): void
     {
@@ -82,7 +82,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Detach all products from order
+     * Detach all products from order.
      */
     public function detachAllProducts(Order $order): void
     {
@@ -90,7 +90,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get orders by status
+     * Get orders by status.
      */
     public function getByStatus(string $status): Collection
     {
@@ -98,7 +98,7 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get orders by date range
+     * Get orders by date range.
      */
     public function getByDateRange(string $startDate, string $endDate): Collection
     {

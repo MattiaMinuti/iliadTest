@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Dao\OrderDao;
 use App\Dao\ProductDao;
-use App\Services\OrderService;
-use App\Services\ProductService;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\OrderService;
+use App\Services\ProductService;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

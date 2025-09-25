@@ -3,15 +3,15 @@ export default {
   app: {
     title: 'Gestionale Iliad',
     toggleTheme: 'Toggle theme',
-    changeLanguage: 'Change language'
+    changeLanguage: 'Change language',
   },
-  
+
   // Navigation Menu
   nav: {
     orders: 'Orders',
-    products: 'Products'
+    products: 'Products',
   },
-  
+
   // Orders Page
   orders: {
     title: 'Orders Management',
@@ -27,9 +27,9 @@ export default {
     total: 'Total',
     viewDetails: 'View Details',
     edit: 'Edit',
-    delete: 'Delete'
+    delete: 'Delete',
   },
-  
+
   // Order Detail
   orderDetail: {
     backToOrders: 'Back to Orders',
@@ -49,9 +49,9 @@ export default {
     quantity: 'Quantity',
     totalPrice: 'Total Price',
     orderNotFound: 'Order Not Found',
-    orderNotFoundDesc: 'The requested order could not be found.'
+    orderNotFoundDesc: 'The requested order could not be found.',
   },
-  
+
   // Order Dialog
   orderDialog: {
     createTitle: 'Create New Order',
@@ -62,14 +62,15 @@ export default {
     totalAmount: 'Total Amount',
     orderProducts: 'Order Products',
     addProduct: 'Add Product',
-    noProducts: 'No products added to this order yet. Click "Add Product" to get started.',
+    noProducts:
+      'No products added to this order yet. Click "Add Product" to get started.',
     product: 'Product',
     stock: 'Stock',
     cancel: 'Cancel',
     createOrder: 'Create Order',
-    updateOrder: 'Update Order'
+    updateOrder: 'Update Order',
   },
-  
+
   // Products Page
   products: {
     title: 'Products Management',
@@ -80,9 +81,9 @@ export default {
     newProduct: 'New Product',
     productName: 'Product Name',
     price: 'Price',
-    stock: 'Stock'
+    stock: 'Stock',
   },
-  
+
   // Product Dialog
   productDialog: {
     createTitle: 'Create New Product',
@@ -93,31 +94,31 @@ export default {
     stockQuantity: 'Stock Quantity',
     cancel: 'Cancel',
     createProduct: 'Create Product',
-    updateProduct: 'Update Product'
+    updateProduct: 'Update Product',
   },
-  
+
   // Status
   status: {
     pending: 'Pending',
     processing: 'Processing',
     completed: 'Completed',
-    cancelled: 'Cancelled'
+    cancelled: 'Cancelled',
   },
-  
+
   // Stock Status
   stockStatus: {
     inStock: 'In Stock',
-    outOfStock: 'Out of Stock'
+    outOfStock: 'Out of Stock',
   },
-  
+
   // Sort Options
   sortOptions: {
     name: 'Name',
     price: 'Price',
     stock: 'Stock',
-    sku: 'SKU'
+    sku: 'SKU',
   },
-  
+
   // Common
   common: {
     loading: 'Loading...',
@@ -132,17 +133,17 @@ export default {
     close: 'Close',
     confirm: 'Confirm',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
   },
-  
+
   // Confirmations
   confirmations: {
     deleteOrder: 'Are you sure you want to delete the order "{name}"?',
     deleteProduct: 'Are you sure you want to delete the product "{name}"?',
     deleteWarning: 'This action cannot be undone.',
-    confirmDelete: 'Confirm Delete'
+    confirmDelete: 'Confirm Delete',
   },
-  
+
   // Messages
   messages: {
     orderCreated: 'Order created successfully',
@@ -164,14 +165,14 @@ export default {
     orderNotFound: 'Order not found',
     productNotFound: 'Product not found',
     serverError: 'Internal server error',
-    genericError: 'An error occurred'
+    genericError: 'An error occurred',
   },
-  
+
   // Validation
   validation: {
     required: 'This field is required',
     minQuantity: 'Quantity must be greater than 0',
     minPrice: 'Price must be 0 or greater',
-    minStock: 'Stock quantity must be 0 or greater'
-  }
-}
+    minStock: 'Stock quantity must be 0 or greater',
+  },
+};

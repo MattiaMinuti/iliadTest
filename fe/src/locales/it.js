@@ -3,15 +3,15 @@ export default {
   app: {
     title: 'Gestionale Iliad',
     toggleTheme: 'Cambia tema',
-    changeLanguage: 'Cambia lingua'
+    changeLanguage: 'Cambia lingua',
   },
-  
+
   // Navigation Menu
   nav: {
     orders: 'Ordini',
-    products: 'Prodotti'
+    products: 'Prodotti',
   },
-  
+
   // Orders Page
   orders: {
     title: 'Gestione Ordini',
@@ -27,9 +27,9 @@ export default {
     total: 'Totale',
     viewDetails: 'Visualizza Dettagli',
     edit: 'Modifica',
-    delete: 'Elimina'
+    delete: 'Elimina',
   },
-  
+
   // Order Detail
   orderDetail: {
     backToOrders: 'Torna agli Ordini',
@@ -49,9 +49,9 @@ export default {
     quantity: 'Quantità',
     totalPrice: 'Prezzo Totale',
     orderNotFound: 'Ordine Non Trovato',
-    orderNotFoundDesc: 'L\'ordine richiesto non è stato trovato.'
+    orderNotFoundDesc: 'L\'ordine richiesto non è stato trovato.',
   },
-  
+
   // Order Dialog
   orderDialog: {
     createTitle: 'Crea Nuovo Ordine',
@@ -62,14 +62,15 @@ export default {
     totalAmount: 'Importo Totale',
     orderProducts: 'Prodotti Ordine',
     addProduct: 'Aggiungi Prodotto',
-    noProducts: 'Nessun prodotto aggiunto a questo ordine ancora. Clicca "Aggiungi Prodotto" per iniziare.',
+    noProducts:
+      'Nessun prodotto aggiunto a questo ordine ancora. Clicca "Aggiungi Prodotto" per iniziare.',
     product: 'Prodotto',
     stock: 'Scorta',
     cancel: 'Annulla',
     createOrder: 'Crea Ordine',
-    updateOrder: 'Aggiorna Ordine'
+    updateOrder: 'Aggiorna Ordine',
   },
-  
+
   // Products Page
   products: {
     title: 'Gestione Prodotti',
@@ -80,9 +81,9 @@ export default {
     newProduct: 'Nuovo Prodotto',
     productName: 'Nome Prodotto',
     price: 'Prezzo',
-    stock: 'Scorta'
+    stock: 'Scorta',
   },
-  
+
   // Product Dialog
   productDialog: {
     createTitle: 'Crea Nuovo Prodotto',
@@ -93,31 +94,31 @@ export default {
     stockQuantity: 'Quantità Scorta',
     cancel: 'Annulla',
     createProduct: 'Crea Prodotto',
-    updateProduct: 'Aggiorna Prodotto'
+    updateProduct: 'Aggiorna Prodotto',
   },
-  
+
   // Status
   status: {
     pending: 'In Attesa',
     processing: 'In Elaborazione',
     completed: 'Completato',
-    cancelled: 'Annullato'
+    cancelled: 'Annullato',
   },
-  
+
   // Stock Status
   stockStatus: {
     inStock: 'Disponibile',
-    outOfStock: 'Esaurito'
+    outOfStock: 'Esaurito',
   },
-  
+
   // Sort Options
   sortOptions: {
     name: 'Nome',
     price: 'Prezzo',
     stock: 'Scorta',
-    sku: 'SKU'
+    sku: 'SKU',
   },
-  
+
   // Common
   common: {
     loading: 'Caricamento...',
@@ -132,17 +133,17 @@ export default {
     close: 'Chiudi',
     confirm: 'Conferma',
     yes: 'Sì',
-    no: 'No'
+    no: 'No',
   },
-  
+
   // Confirmations
   confirmations: {
     deleteOrder: 'Sei sicuro di voler eliminare l\'ordine "{name}"?',
     deleteProduct: 'Sei sicuro di voler eliminare il prodotto "{name}"?',
     deleteWarning: 'Questa azione non può essere annullata.',
-    confirmDelete: 'Conferma Eliminazione'
+    confirmDelete: 'Conferma Eliminazione',
   },
-  
+
   // Messages
   messages: {
     orderCreated: 'Ordine creato con successo',
@@ -164,14 +165,14 @@ export default {
     orderNotFound: 'Ordine non trovato',
     productNotFound: 'Prodotto non trovato',
     serverError: 'Errore del server',
-    genericError: 'Si è verificato un errore'
+    genericError: 'Si è verificato un errore',
   },
-  
+
   // Validation
   validation: {
     required: 'Questo campo è obbligatorio',
     minQuantity: 'La quantità deve essere maggiore di 0',
     minPrice: 'Il prezzo deve essere 0 o maggiore',
-    minStock: 'La quantità di scorta deve essere 0 o maggiore'
-  }
-}
+    minStock: 'La quantità di scorta deve essere 0 o maggiore',
+  },
+};

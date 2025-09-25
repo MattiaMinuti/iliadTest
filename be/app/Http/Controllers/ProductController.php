@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\ProductService;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -66,7 +66,6 @@ class ProductController extends Controller
                 'message' => 'Product created successfully',
                 'data' => $product,
             ], 201);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -129,7 +128,6 @@ class ProductController extends Controller
                 'message' => 'Product updated successfully',
                 'data' => $product,
             ]);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -162,7 +160,6 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Product deleted successfully',
             ]);
-
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
