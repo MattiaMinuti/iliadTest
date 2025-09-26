@@ -21,11 +21,6 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/phpunit/"
-        }
-    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
