@@ -72,13 +72,16 @@ class OrderDao extends BaseDao
      */
     public function attachProducts(Order $order, array $products): void
     {
+        $productsToSync = [];
         foreach ($products as $productData) {
-            $order->products()->attach($productData['product_id'], [
+            $productsToSync[$productData['product_id']] = [
                 'quantity' => $productData['quantity'],
                 'unit_price' => $productData['unit_price'],
                 'total_price' => $productData['total_price'],
-            ]);
+            ];
         }
+
+        $order->products()->sync($productsToSync);
     }
 
     /**

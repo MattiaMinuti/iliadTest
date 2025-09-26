@@ -159,11 +159,26 @@ class OrderService extends BaseService
             $this->productDao->updateStock($currentProduct, $currentProduct->stock_quantity + $currentProduct->pivot->quantity);
         }
 
-        // Clear current products
-        $this->dao->detachAllProducts($order);
+        // Prepare products data for sync
+        $productsToAttach = [];
+        foreach ($newProducts as $productData) {
+            $product = $this->productDao->findByIdOrFail($productData['product_id']);
+            $productsToAttach[] = [
+                'product_id' => $product->id,
+                'quantity' => $productData['quantity'],
+                'unit_price' => $product->price,
+                'total_price' => $product->price * $productData['quantity'],
+            ];
+        }
 
-        // Attach new products and reduce stock
-        $this->attachProductsAndReduceStock($order, $newProducts);
+        // Sync products (this handles both detach and attach automatically)
+        $this->dao->attachProducts($order, $productsToAttach);
+
+        // Reduce stock for new products
+        foreach ($newProducts as $productData) {
+            $product = $this->productDao->findByIdOrFail($productData['product_id']);
+            $this->productDao->updateStock($product, $product->stock_quantity - $productData['quantity']);
+        }
 
         // Update total amount
         $this->dao->update($order, ['total_amount' => $totalAmount]);
