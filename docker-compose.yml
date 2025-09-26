@@ -66,21 +66,6 @@ services:
     stdin_open: true
     tty: true
 
-  # phpMyAdmin (Optional - for database management)
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: gestionale_iliad_phpmyadmin
-    restart: unless-stopped
-    environment:
-      PMA_HOST: mysql
-      PMA_USER: app_user
-      PMA_PASSWORD: app_password
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
-    networks:
-      - app-network
 
 volumes:
   mysql_data:

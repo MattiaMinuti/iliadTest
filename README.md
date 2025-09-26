@@ -46,6 +46,7 @@ Before you begin, ensure you have the following installed:
 - [Docker](https://www.docker.com/get-started) (version 20.10+)
 - [Docker Compose](https://docs.docker.com/compose/install/) (version 2.0+)
 - [Git](https://git-scm.com/)
+- [TablePlus](https://tableplus.com/) (recommended for database management)
 
 ## 🚀 Quick Start with Docker
 
@@ -68,7 +69,6 @@ This will start:
 - **MySQL Database** on port 3306
 - **Backend API** on port 8000
 - **Frontend Application** on port 3000
-- **phpMyAdmin** on port 8080 (optional database management)
 
 ### 3. Initialize the Database
 ```bash
@@ -85,7 +85,88 @@ php artisan db:seed
 ### 4. Access the Application
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
-- **phpMyAdmin**: http://localhost:8080 (username: app_user, password: app_password)
+
+### 5. Database Management
+For database management, we recommend using **TablePlus** (modern, fast, and user-friendly):
+
+**Connection Settings:**
+- **Host**: localhost
+- **Port**: 3306
+- **Database**: order_management
+- **Username**: app_user
+- **Password**: app_password
+
+**Alternative Tools:**
+- MySQL Workbench
+- Sequel Pro (macOS)
+- DBeaver (cross-platform)
+
+## 🗄️ Database Management with TablePlus
+
+TablePlus is our recommended database management tool for its modern interface and excellent performance.
+
+### Setting up TablePlus Connection
+
+1. **Download and Install TablePlus**
+   - Visit [tableplus.com](https://tableplus.com/)
+   - Download the appropriate version for your OS
+   - Install the application
+
+2. **Create New Connection**
+   - Open TablePlus
+   - Click "Create a new connection"
+   - Select "MySQL" from the database types
+
+3. **Configure Connection Settings**
+   ```
+   Name: Gestionale Iliad
+   Host: localhost
+   Port: 3306
+   User: app_user
+   Password: app_password
+   Database: order_management
+   ```
+
+4. **Test Connection**
+   - Click "Test" to verify the connection
+   - If successful, click "Connect"
+
+### TablePlus Features for This Project
+
+- **Visual Query Builder**: Easy to build complex queries
+- **Data Export/Import**: Export data to CSV, JSON, SQL
+- **Real-time Data**: See changes immediately
+- **Multiple Tabs**: Work with multiple tables simultaneously
+- **SQL Editor**: Advanced SQL editing with syntax highlighting
+- **Data Visualization**: Charts and graphs for data analysis
+
+### Quick Database Operations
+
+**View Orders:**
+```sql
+SELECT * FROM orders ORDER BY order_date DESC;
+```
+
+**View Products:**
+```sql
+SELECT * FROM products WHERE stock_quantity > 0;
+```
+
+**Order Details with Products:**
+```sql
+SELECT 
+    o.name as order_name,
+    o.total_amount,
+    o.order_date,
+    p.name as product_name,
+    op.quantity,
+    op.unit_price,
+    op.total_price
+FROM orders o
+JOIN order_products op ON o.id = op.order_id
+JOIN products p ON op.product_id = p.id
+ORDER BY o.order_date DESC;
+```
 
 ## 🔧 Manual Setup (Alternative)
 
