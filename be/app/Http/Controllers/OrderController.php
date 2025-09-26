@@ -35,15 +35,9 @@ class OrderController extends Controller
             $perPage = $request->get('per_page', 15);
             $orders = $this->orderService->getOrdersWithFilters($filters, $perPage);
 
-            return response()->json([
-                'success' => true,
-                'data' => $orders,
-            ]);
+            return $this->paginatedResponse($orders, 'Orders retrieved successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve orders: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve orders: ' . $e->getMessage());
         }
     }
 
@@ -73,23 +67,11 @@ class OrderController extends Controller
 
             $order = $this->orderService->createOrder($orderData);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Order created successfully',
-                'data' => $order,
-            ], 201);
+            return $this->createdResponse($order, 'Order created successfully');
         } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->validationErrorResponse($e->errors());
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse($e->getMessage());
         }
     }
 
@@ -102,21 +84,12 @@ class OrderController extends Controller
             $order = $this->orderService->getOrderWithProducts($id);
 
             if (! $order) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Order not found',
-                ], 404);
+                return $this->notFoundResponse('Order not found');
             }
 
-            return response()->json([
-                'success' => true,
-                'data' => $order,
-            ]);
+            return $this->successResponse($order, 'Order retrieved successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve order: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve order: ' . $e->getMessage());
         }
     }
 
@@ -146,28 +119,13 @@ class OrderController extends Controller
 
             $order = $this->orderService->updateOrder($order, $orderData);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Order updated successfully',
-                'data' => $order,
-            ]);
+            return $this->updatedResponse($order, 'Order updated successfully');
         } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->validationErrorResponse($e->errors());
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Order not found',
-            ], 404);
+            return $this->notFoundResponse('Order not found');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update order',
-                'error' => $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to update order: ' . $e->getMessage());
         }
     }
 
@@ -180,20 +138,11 @@ class OrderController extends Controller
             $order = $this->orderService->findByIdOrFail($id);
             $this->orderService->deleteOrder($order);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Order deleted successfully',
-            ]);
+            return $this->deletedResponse('Order deleted successfully');
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Order not found',
-            ], 404);
+            return $this->notFoundResponse('Order not found');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete order: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to delete order: ' . $e->getMessage());
         }
     }
 }

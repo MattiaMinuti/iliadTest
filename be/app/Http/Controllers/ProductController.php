@@ -33,15 +33,9 @@ class ProductController extends Controller
             $perPage = $request->get('per_page', 15);
             $products = $this->productService->getProductsWithFilters($filters, $perPage);
 
-            return response()->json([
-                'success' => true,
-                'data' => $products,
-            ]);
+            return $this->paginatedResponse($products, 'Products retrieved successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve products: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve products: ' . $e->getMessage());
         }
     }
 
@@ -61,22 +55,11 @@ class ProductController extends Controller
 
             $product = $this->productService->createProduct($request->all());
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Product created successfully',
-                'data' => $product,
-            ], 201);
+            return $this->createdResponse($product, 'Product created successfully');
         } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->validationErrorResponse($e->errors());
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -88,20 +71,11 @@ class ProductController extends Controller
         try {
             $product = $this->productService->findByIdOrFail($id);
 
-            return response()->json([
-                'success' => true,
-                'data' => $product,
-            ]);
+            return $this->successResponse($product, 'Product retrieved successfully');
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found',
-            ], 404);
+            return $this->notFoundResponse('Product not found');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve product: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve product: ' . $e->getMessage());
         }
     }
 
@@ -123,27 +97,13 @@ class ProductController extends Controller
 
             $product = $this->productService->updateProduct($product, $request->all());
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Product updated successfully',
-                'data' => $product,
-            ]);
+            return $this->updatedResponse($product, 'Product updated successfully');
         } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->validationErrorResponse($e->errors());
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found',
-            ], 404);
+            return $this->notFoundResponse('Product not found');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -156,20 +116,11 @@ class ProductController extends Controller
             $product = $this->productService->findByIdOrFail($id);
             $this->productService->deleteProduct($product);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Product deleted successfully',
-            ]);
+            return $this->deletedResponse('Product deleted successfully');
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found',
-            ], 404);
+            return $this->notFoundResponse('Product not found');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -181,15 +132,9 @@ class ProductController extends Controller
         try {
             $products = $this->productService->getOutOfStockProducts();
 
-            return response()->json([
-                'success' => true,
-                'data' => $products,
-            ]);
+            return $this->successResponse($products, 'Out of stock products retrieved successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve out of stock products: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve out of stock products: ' . $e->getMessage());
         }
     }
 
@@ -202,15 +147,9 @@ class ProductController extends Controller
             $threshold = $request->get('threshold', 10);
             $products = $this->productService->getLowStockProducts($threshold);
 
-            return response()->json([
-                'success' => true,
-                'data' => $products,
-            ]);
+            return $this->successResponse($products, 'Low stock products retrieved successfully');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve low stock products: ' . $e->getMessage(),
-            ], 500);
+            return $this->serverErrorResponse('Failed to retrieve low stock products: ' . $e->getMessage());
         }
     }
 }
