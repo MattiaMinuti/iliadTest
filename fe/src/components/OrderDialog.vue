@@ -68,7 +68,7 @@
                 :label="$t('orderDialog.totalAmount')"
                 variant="outlined"
                 readonly
-                prepend-inner-icon="mdi-currency-usd"
+                prepend-inner-icon="$currencyUsd"
               />
             </v-col>
           </v-row>
@@ -405,6 +405,17 @@ export default {
           loadProducts();
         }
       },
+    );
+
+    // Watch for order changes to populate form data
+    watch(
+      () => props.order,
+      () => {
+        if (props.modelValue && props.mode === 'edit') {
+          populateForm();
+        }
+      },
+      { deep: true },
     );
 
     onMounted(() => {
