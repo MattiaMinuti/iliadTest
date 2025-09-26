@@ -1,0 +1,26 @@
+{
+  "name": "Gestionale Iliad",
+  "short_name": "Gestionale Iliad",
+  "description": "Sistema di gestione ordini e prodotti Iliad",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#E60012",
+  "icons": [
+    {
+      "src": "/iliad-logo.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/iliad-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/iliad-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
