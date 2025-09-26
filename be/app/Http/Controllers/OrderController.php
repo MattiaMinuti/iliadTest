@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\OrderValidation;
 use App\Services\OrderService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -10,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    use OrderValidation;
+
     protected $orderService;
 
     public function __construct(OrderService $orderService)
@@ -23,6 +26,8 @@ class OrderController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
+            $this->validateOrderFilter($request);
+
             $filters = [
                 'start_date' => $request->get('start_date'),
                 'end_date' => $request->get('end_date'),
@@ -47,15 +52,7 @@ class OrderController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'order_date' => 'required|date',
-                'status' => 'in:pending,processing,completed,cancelled',
-                'products' => 'required|array|min:1',
-                'products.*.product_id' => 'required|exists:products,id',
-                'products.*.quantity' => 'required|integer|min:1',
-            ]);
+            $this->validateOrderCreate($request);
 
             $orderData = [
                 'name' => $request->name,
@@ -101,15 +98,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->findByIdOrFail($id);
 
-            $this->validate($request, [
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'nullable|string',
-                'order_date' => 'sometimes|required|date',
-                'status' => 'sometimes|in:pending,processing,completed,cancelled',
-                'products' => 'sometimes|array|min:1',
-                'products.*.product_id' => 'required_with:products|exists:products,id',
-                'products.*.quantity' => 'required_with:products|integer|min:1',
-            ]);
+            $this->validateOrderUpdate($request);
 
             $orderData = $request->only(['name', 'description', 'order_date', 'status']);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\ProductValidation;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -10,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
+    use ProductValidation;
+
     protected $productService;
 
     public function __construct(ProductService $productService)
@@ -23,6 +26,8 @@ class ProductController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
+            $this->validateProductFilter($request);
+
             $filters = [
                 'stock_status' => $request->get('stock_status'),
                 'search' => $request->get('search'),
@@ -45,13 +50,7 @@ class ProductController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric|min:0',
-                'sku' => 'required|string|max:255',
-                'stock_quantity' => 'required|integer|min:0',
-            ]);
+            $this->validateProductCreate($request);
 
             $product = $this->productService->createProduct($request->all());
 
@@ -87,13 +86,7 @@ class ProductController extends Controller
         try {
             $product = $this->productService->findByIdOrFail($id);
 
-            $this->validate($request, [
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'sometimes|required|numeric|min:0',
-                'sku' => 'sometimes|required|string|max:255',
-                'stock_quantity' => 'sometimes|required|integer|min:0',
-            ]);
+            $this->validateProductUpdate($request, $id);
 
             $product = $this->productService->updateProduct($product, $request->all());
 
@@ -144,6 +137,8 @@ class ProductController extends Controller
     public function lowStock(Request $request): JsonResponse
     {
         try {
+            $this->validateLowStockThreshold($request);
+
             $threshold = $request->get('threshold', 10);
             $products = $this->productService->getLowStockProducts($threshold);
 
