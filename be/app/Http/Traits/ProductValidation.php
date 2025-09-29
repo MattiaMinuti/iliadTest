@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Validation\ValidationException;
+
 trait ProductValidation
 {
     /**
@@ -58,6 +60,7 @@ trait ProductValidation
 
     /**
      * Validate product creation request.
+     * @throws ValidationException
      */
     protected function validateProductCreate($request): void
     {
@@ -66,6 +69,7 @@ trait ProductValidation
 
     /**
      * Validate product update request.
+     * @throws ValidationException
      */
     protected function validateProductUpdate($request, int $productId): void
     {
@@ -74,17 +78,10 @@ trait ProductValidation
 
     /**
      * Validate product filter request.
+     * @throws ValidationException
      */
     protected function validateProductFilter($request): void
     {
         $this->validate($request, $this->getProductFilterRules());
-    }
-
-    /**
-     * Validate low stock threshold request.
-     */
-    protected function validateLowStockThreshold($request): void
-    {
-        $this->validate($request, $this->getLowStockThresholdRules());
     }
 }

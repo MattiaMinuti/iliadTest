@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Validation\ValidationException;
+
 trait OrderValidation
 {
     /**
@@ -54,6 +56,7 @@ trait OrderValidation
 
     /**
      * Validate order creation request.
+     * @throws ValidationException
      */
     protected function validateOrderCreate($request): void
     {
@@ -62,6 +65,7 @@ trait OrderValidation
 
     /**
      * Validate order update request.
+     * @throws ValidationException
      */
     protected function validateOrderUpdate($request): void
     {
@@ -70,6 +74,7 @@ trait OrderValidation
 
     /**
      * Validate order filter request.
+     * @throws ValidationException
      */
     protected function validateOrderFilter($request): void
     {
