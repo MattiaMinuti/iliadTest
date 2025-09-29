@@ -59,3 +59,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Cache files
+be/.php-cs-fixer.cache
+be/.phpunit.result.cache
