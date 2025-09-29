@@ -12,16 +12,10 @@
     </v-row>
 
     <!-- Filters and Search -->
-    <v-card
-      class="mb-4"
-      elevation="1"
-    >
+    <v-card class="mb-4" elevation="1">
       <v-card-text>
         <v-row>
-          <v-col
-            cols="12"
-            md="4"
-          >
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="filters.search"
               :label="$t('orders.searchPlaceholder')"
@@ -32,10 +26,7 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="2"
-          >
+          <v-col cols="12" md="2">
             <v-text-field
               v-model="filters.startDate"
               :label="$t('orders.startDate')"
@@ -45,10 +36,7 @@
               @change="loadOrders"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="2"
-          >
+          <v-col cols="12" md="2">
             <v-text-field
               v-model="filters.endDate"
               :label="$t('orders.endDate')"
@@ -58,10 +46,7 @@
               @change="loadOrders"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="2"
-          >
+          <v-col cols="12" md="2">
             <v-select
               v-model="filters.status"
               :items="statusOptions"
@@ -72,19 +57,14 @@
               @update:model-value="loadOrders"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="2"
-          >
+          <v-col cols="12" md="2">
             <v-btn
               color="primary"
               variant="elevated"
               block
               @click="openCreateDialog"
             >
-              <v-icon start>
-                $plus
-              </v-icon>
+              <v-icon start>$plus</v-icon>
               {{ $t('orders.newOrder') }}
             </v-btn>
           </v-col>
@@ -124,31 +104,15 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn
-            icon
-            size="small"
-            variant="text"
-            @click="viewOrder(item.id)"
-          >
+          <v-btn icon size="small" variant="text" @click="viewOrder(item.id)">
             <v-icon>$eye</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top"
-            >
+            <v-tooltip activator="parent" location="top">
               {{ $t('orders.viewDetails') }}
             </v-tooltip>
           </v-btn>
-          <v-btn
-            icon
-            size="small"
-            variant="text"
-            @click="editOrder(item)"
-          >
+          <v-btn icon size="small" variant="text" @click="editOrder(item)">
             <v-icon>$pencil</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top"
-            >
+            <v-tooltip activator="parent" location="top">
               {{ $t('orders.edit') }}
             </v-tooltip>
           </v-btn>
@@ -160,10 +124,7 @@
             @click="deleteOrder(item)"
           >
             <v-icon>$delete</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top"
-            >
+            <v-tooltip activator="parent" location="top">
               {{ $t('orders.delete') }}
             </v-tooltip>
           </v-btn>
@@ -180,10 +141,7 @@
     />
 
     <!-- Delete Confirmation Dialog -->
-    <v-dialog
-      v-model="deleteDialog.show"
-      max-width="400"
-    >
+    <v-dialog v-model="deleteDialog.show" max-width="400">
       <v-card>
         <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
@@ -194,10 +152,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="deleteDialog.show = false"
-          >
+          <v-btn variant="text" @click="deleteDialog.show = false">
             {{ $t('common.cancel') }}
           </v-btn>
           <v-btn
@@ -250,6 +205,7 @@ export default {
       show: false,
       order: null,
       mode: 'create',
+      loading: false,
     });
 
     const deleteDialog = reactive({
@@ -333,10 +289,24 @@ export default {
       orderDialog.show = true;
     };
 
-    const editOrder = order => {
-      orderDialog.order = { ...order };
-      orderDialog.mode = 'edit';
-      orderDialog.show = true;
+    const editOrder = async order => {
+      try {
+        // Show loading state
+        orderDialog.loading = true;
+
+        // Load the complete order with products before editing
+        const response = await orderService.getOrder(order.id);
+        const completeOrder = response.data;
+
+        orderDialog.order = completeOrder;
+        orderDialog.mode = 'edit';
+        orderDialog.show = true;
+      } catch (error) {
+        console.error('Error loading order for editing:', error);
+        showApiError(notificationStore, error, t, 'messages.loadOrdersFailed');
+      } finally {
+        orderDialog.loading = false;
+      }
     };
 
     const deleteOrder = order => {
@@ -365,7 +335,7 @@ export default {
     };
 
     onMounted(() => {
-      loadOrders();
+      // Orders will be loaded by v-data-table-server @update:options
     });
 
     return {

@@ -2,8 +2,8 @@
   <v-dialog
     :model-value="modelValue"
     max-width="800px"
-    persistent
     @update:model-value="$emit('update:modelValue', $event)"
+    @keydown.esc="closeDialog"
   >
     <v-card>
       <v-card-title class="text-h5">
@@ -14,16 +14,10 @@
         }}
       </v-card-title>
 
-      <v-form
-        ref="form"
-        @submit.prevent="saveOrder"
-      >
+      <v-form ref="form" @submit.prevent="saveOrder">
         <v-card-text>
           <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.name"
                 :label="$t('orderDialog.orderName') + ' *'"
@@ -32,10 +26,7 @@
                 required
               />
             </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-text-field
                 v-model="formData.order_date"
                 :label="$t('orderDialog.orderDate') + ' *'"
@@ -48,10 +39,7 @@
           </v-row>
 
           <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-select
                 v-model="formData.status"
                 :items="statusOptions"
@@ -59,10 +47,7 @@
                 variant="outlined"
               />
             </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-text-field
                 :model-value="totalAmount"
                 :label="$t('orderDialog.totalAmount')"
@@ -92,14 +77,8 @@
               <h3 class="text-h6">
                 {{ $t('orderDialog.orderProducts') }}
               </h3>
-              <v-btn
-                color="primary"
-                size="small"
-                @click="addProduct"
-              >
-                <v-icon start>
-                  $plus
-                </v-icon>
+              <v-btn color="primary" size="small" @click="addProduct">
+                <v-icon start>$plus</v-icon>
                 {{ $t('orderDialog.addProduct') }}
               </v-btn>
             </div>
@@ -121,10 +100,7 @@
             >
               <v-card-text>
                 <v-row align="center">
-                  <v-col
-                    cols="12"
-                    md="5"
-                  >
+                  <v-col cols="12" md="5">
                     <v-autocomplete
                       v-model="productOrder.product_id"
                       :items="availableProducts"
@@ -148,10 +124,7 @@
                       </template>
                     </v-autocomplete>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    md="3"
-                  >
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model.number="productOrder.quantity"
                       :label="$t('orderDetail.quantity') + ' *'"
@@ -163,10 +136,7 @@
                       @input="calculateTotal"
                     />
                   </v-col>
-                  <v-col
-                    cols="12"
-                    md="3"
-                  >
+                  <v-col cols="12" md="3">
                     <v-text-field
                       :model-value="getProductTotal(index)"
                       :label="$t('orders.total')"
@@ -176,10 +146,7 @@
                       prepend-inner-icon="$currencyUsd"
                     />
                   </v-col>
-                  <v-col
-                    cols="12"
-                    md="1"
-                  >
+                  <v-col cols="12" md="1">
                     <v-btn
                       icon
                       size="small"
@@ -198,10 +165,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="closeDialog"
-          >
+          <v-btn variant="text" @click="closeDialog">
             {{ $t('orderDialog.cancel') }}
           </v-btn>
           <v-btn
@@ -223,7 +187,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, watch, onMounted } from 'vue';
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { orderService } from '@/services/orders';
 import { productService } from '@/services/products';
@@ -273,7 +237,7 @@ export default {
       return formData.products
         .reduce((sum, product) => {
           const productData = availableProducts.value.find(
-            p => p.id === product.product_id,
+            p => p.id === product.product_id
           );
           if (productData && product.quantity) {
             return sum + productData.price * product.quantity;
@@ -284,8 +248,13 @@ export default {
     });
 
     const loadProducts = async () => {
+      // Avoid loading if already loaded
+      if (availableProducts.value.length > 0) {
+        return;
+      }
+
       try {
-        const response = await productService.getProducts({ per_page: 1000 });
+        const response = await productService.getProducts({ per_page: 100 });
         availableProducts.value = response.data.data;
       } catch (error) {
         console.error('Error loading products:', error);
@@ -293,7 +262,7 @@ export default {
           notificationStore,
           error,
           t,
-          'messages.loadProductsFailed',
+          'messages.loadProductsFailed'
         );
       }
     };
@@ -320,7 +289,7 @@ export default {
     const getProductTotal = index => {
       const product = formData.products[index];
       const productData = availableProducts.value.find(
-        p => p.id === product.product_id,
+        p => p.id === product.product_id
       );
       if (productData && product.quantity) {
         return (productData.price * product.quantity).toFixed(2);
@@ -340,16 +309,26 @@ export default {
       if (props.order) {
         formData.name = props.order.name || '';
         formData.description = props.order.description || '';
-        formData.order_date =
-          props.order.order_date || new Date().toISOString().split('T')[0];
+
+        // Fix date formatting - handle both string and Date objects
+        if (props.order.order_date) {
+          const date = new Date(props.order.order_date);
+          formData.order_date = date.toISOString().split('T')[0];
+        } else {
+          formData.order_date = new Date().toISOString().split('T')[0];
+        }
+
         formData.status = props.order.status || 'pending';
 
-        // Populate products
-        formData.products =
-          props.order.products?.map(product => ({
+        // Populate products - ensure we have the products array
+        if (props.order.products && Array.isArray(props.order.products)) {
+          formData.products = props.order.products.map(product => ({
             product_id: product.id,
-            quantity: product.pivot.quantity,
-          })) || [];
+            quantity: product.pivot?.quantity || 1,
+          }));
+        } else {
+          formData.products = [];
+        }
       }
     };
 
@@ -404,7 +383,7 @@ export default {
           }
           loadProducts();
         }
-      },
+      }
     );
 
     // Watch for order changes to populate form data
@@ -415,11 +394,25 @@ export default {
           populateForm();
         }
       },
-      { deep: true },
+      { deep: true }
     );
 
+    // Handle ESC key to close dialog
+    const handleKeydown = event => {
+      if (event.key === 'Escape' && props.modelValue) {
+        closeDialog();
+      }
+    };
+
     onMounted(() => {
-      loadProducts();
+      // Products will be loaded when dialog opens via watch
+      // Add global keydown listener for ESC
+      document.addEventListener('keydown', handleKeydown);
+    });
+
+    onUnmounted(() => {
+      // Remove global keydown listener
+      document.removeEventListener('keydown', handleKeydown);
     });
 
     return {
