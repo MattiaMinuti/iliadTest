@@ -8,20 +8,26 @@
  * or as a pre-commit hook.
  */
 
-// Check if backend is running
-function checkBackendRunning($url = 'http://localhost:8000')
+// Check if backend is running (try both localhost and custom domain)
+function checkBackendRunning($urls = ['http://localhost:8000', 'http://iliadApi'])
 {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_NOBODY, true);
+    foreach ($urls as $url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
 
-    $result = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
 
-    return $httpCode === 200;
+        if ($httpCode === 200) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 // Main execution
@@ -30,7 +36,7 @@ echo str_repeat('=', 50) . "\n\n";
 
 // Check if backend is running
 if (! checkBackendRunning()) {
-    echo "❌ Backend is not running at http://localhost:8000\n";
+    echo "❌ Backend is not running at http://localhost:8000 or http://iliadApi\n";
     echo "Please start the backend with: docker-compose up -d\n";
     exit(1);
 }
