@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || '/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -19,7 +18,7 @@ api.interceptors.request.use(
   },
   error => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // Response interceptor
@@ -34,7 +33,7 @@ api.interceptors.response.use(
       console.error('Server error:', error.response.data);
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;

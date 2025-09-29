@@ -12,16 +12,10 @@
     </v-row>
 
     <!-- Filters and Search -->
-    <v-card
-      class="mb-4"
-      elevation="1"
-    >
+    <v-card class="mb-4" elevation="1">
       <v-card-text>
         <v-row>
-          <v-col
-            cols="12"
-            md="4"
-          >
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="filters.search"
               :label="$t('products.searchPlaceholder')"
@@ -32,10 +26,7 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="3"
-          >
+          <v-col cols="12" md="3">
             <v-select
               v-model="filters.inStock"
               :items="stockOptions"
@@ -46,10 +37,7 @@
               @update:model-value="loadProducts"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="3"
-          >
+          <v-col cols="12" md="3">
             <v-select
               v-model="sortBy"
               :items="sortOptions"
@@ -59,19 +47,14 @@
               @update:model-value="loadProducts"
             />
           </v-col>
-          <v-col
-            cols="12"
-            md="2"
-          >
+          <v-col cols="12" md="2">
             <v-btn
               color="primary"
               variant="elevated"
               block
               @click="openCreateDialog"
             >
-              <v-icon start>
-                $plus
-              </v-icon>
+              <v-icon start>$plus</v-icon>
               {{ $t('products.newProduct') }}
             </v-btn>
           </v-col>
@@ -93,10 +76,7 @@
         @update:options="loadProducts"
       >
         <template #item.sku="{ item }">
-          <v-chip
-            size="small"
-            variant="outlined"
-          >
+          <v-chip size="small" variant="outlined">
             {{ item.sku }}
           </v-chip>
         </template>
@@ -116,19 +96,9 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn
-            icon
-            size="small"
-            variant="text"
-            @click="editProduct(item)"
-          >
+          <v-btn icon size="small" variant="text" @click="editProduct(item)">
             <v-icon>$pencil</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top"
-            >
-              Edit
-            </v-tooltip>
+            <v-tooltip activator="parent" location="top">Edit</v-tooltip>
           </v-btn>
           <v-btn
             icon
@@ -138,23 +108,14 @@
             @click="deleteProduct(item)"
           >
             <v-icon>$delete</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top"
-            >
-              Delete
-            </v-tooltip>
+            <v-tooltip activator="parent" location="top">Delete</v-tooltip>
           </v-btn>
         </template>
       </v-data-table-server>
     </v-card>
 
     <!-- Create/Edit Product Dialog -->
-    <v-dialog
-      v-model="productDialog.show"
-      max-width="600px"
-      persistent
-    >
+    <v-dialog v-model="productDialog.show" max-width="600px" persistent>
       <v-card>
         <v-card-title class="text-h5">
           {{
@@ -164,16 +125,10 @@
           }}
         </v-card-title>
 
-        <v-form
-          ref="form"
-          @submit.prevent="saveProduct"
-        >
+        <v-form ref="form" @submit.prevent="saveProduct">
           <v-card-text>
             <v-row>
-              <v-col
-                cols="12"
-                md="6"
-              >
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model="productDialog.product.name"
                   :label="$t('productDialog.productName') + ' *'"
@@ -182,10 +137,7 @@
                   required
                 />
               </v-col>
-              <v-col
-                cols="12"
-                md="6"
-              >
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model="productDialog.product.sku"
                   :label="$t('orderDetail.sku') + ' *'"
@@ -197,10 +149,7 @@
             </v-row>
 
             <v-row>
-              <v-col
-                cols="12"
-                md="6"
-              >
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model.number="productDialog.product.price"
                   :label="$t('productDialog.price') + ' *'"
@@ -213,10 +162,7 @@
                   required
                 />
               </v-col>
-              <v-col
-                cols="12"
-                md="6"
-              >
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model.number="productDialog.product.stock_quantity"
                   :label="$t('productDialog.stockQuantity') + ' *'"
@@ -243,10 +189,7 @@
 
           <v-card-actions>
             <v-spacer />
-            <v-btn
-              variant="text"
-              @click="productDialog.show = false"
-            >
+            <v-btn variant="text" @click="productDialog.show = false">
               Cancel
             </v-btn>
             <v-btn
@@ -266,10 +209,7 @@
     </v-dialog>
 
     <!-- Delete Confirmation Dialog -->
-    <v-dialog
-      v-model="deleteDialog.show"
-      max-width="400"
-    >
+    <v-dialog v-model="deleteDialog.show" max-width="400">
       <v-card>
         <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
@@ -282,10 +222,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="deleteDialog.show = false"
-          >
+          <v-btn variant="text" @click="deleteDialog.show = false">
             {{ $t('common.cancel') }}
           </v-btn>
           <v-btn
@@ -406,7 +343,7 @@ export default {
           notificationStore,
           error,
           t,
-          'messages.loadProductsFailed',
+          'messages.loadProductsFailed'
         );
       } finally {
         loading.value = false;
@@ -443,7 +380,7 @@ export default {
         } else {
           await productService.updateProduct(
             productDialog.product.id,
-            productDialog.product,
+            productDialog.product
           );
           notificationStore.showSuccess(t('messages.productUpdated'));
         }
@@ -476,7 +413,7 @@ export default {
           notificationStore,
           error,
           t,
-          'messages.deleteProductFailed',
+          'messages.deleteProductFailed'
         );
       } finally {
         deleteDialog.loading = false;

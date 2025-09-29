@@ -2,39 +2,22 @@
   <div>
     <v-row class="mb-4">
       <v-col>
-        <v-btn
-          variant="text"
-          prepend-icon="$arrowLeft"
-          @click="$router.go(-1)"
-        >
+        <v-btn variant="text" prepend-icon="$arrowLeft" @click="$router.go(-1)">
           {{ $t('orderDetail.backToOrders') }}
         </v-btn>
       </v-col>
     </v-row>
 
-    <div
-      v-if="loading"
-      class="text-center py-8"
-    >
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        size="64"
-      />
+    <div v-if="loading" class="text-center py-8">
+      <v-progress-circular indeterminate color="primary" size="64" />
     </div>
 
     <div v-else-if="order">
       <!-- Order Header -->
-      <v-card
-        class="mb-4"
-        elevation="1"
-      >
+      <v-card class="mb-4" elevation="1">
         <v-card-text>
           <v-row>
-            <v-col
-              cols="12"
-              md="8"
-            >
+            <v-col cols="12" md="8">
               <h1 class="text-h4 font-weight-bold mb-2">
                 {{ order.name }}
               </h1>
@@ -45,11 +28,7 @@
                 {{ order.description }}
               </p>
             </v-col>
-            <v-col
-              cols="12"
-              md="4"
-              class="text-md-right"
-            >
+            <v-col cols="12" md="4" class="text-md-right">
               <v-chip
                 :color="getStatusColor(order.status)"
                 size="large"
@@ -68,10 +47,7 @@
 
       <!-- Order Information -->
       <v-row class="mb-4">
-        <v-col
-          cols="12"
-          md="6"
-        >
+        <v-col cols="12" md="6">
           <v-card elevation="1">
             <v-card-title>
               {{ $t('orderDetail.orderInformation') }}
@@ -142,10 +118,7 @@
           </v-card>
         </v-col>
 
-        <v-col
-          cols="12"
-          md="6"
-        >
+        <v-col cols="12" md="6">
           <v-card elevation="1">
             <v-card-title>{{ $t('orderDetail.actions') }}</v-card-title>
             <v-card-text>
@@ -177,18 +150,12 @@
       <!-- Order Products -->
       <v-card elevation="1">
         <v-card-title>
-          <v-icon class="mr-2">
-            $packageVariant
-          </v-icon>
+          <v-icon class="mr-2">$packageVariant</v-icon>
           {{ $t('orderDetail.orderProducts') }}
         </v-card-title>
 
         <v-card-text v-if="!order.products || order.products.length === 0">
-          <v-alert
-            type="info"
-            variant="tonal"
-            class="mb-0"
-          >
+          <v-alert type="info" variant="tonal" class="mb-0">
             {{ $t('orderDetail.noProducts') }}
           </v-alert>
         </v-card-text>
@@ -210,10 +177,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="product in order.products"
-              :key="product.id"
-            >
+            <tr v-for="product in order.products" :key="product.id">
               <td>
                 <div class="font-weight-medium">
                   {{ product.name }}
@@ -226,10 +190,7 @@
                 </div>
               </td>
               <td>
-                <v-chip
-                  size="small"
-                  variant="outlined"
-                >
+                <v-chip size="small" variant="outlined">
                   {{ product.sku }}
                 </v-chip>
               </td>
@@ -237,11 +198,7 @@
                 ${{ parseFloat(product.pivot.unit_price).toFixed(2) }}
               </td>
               <td class="text-right">
-                <v-chip
-                  size="small"
-                  color="primary"
-                  variant="tonal"
-                >
+                <v-chip size="small" color="primary" variant="tonal">
                   {{ product.pivot.quantity }}
                 </v-chip>
               </td>
@@ -252,12 +209,7 @@
           </tbody>
           <tfoot>
             <tr class="font-weight-bold">
-              <td
-                colspan="4"
-                class="text-right"
-              >
-                {{ $t('orders.total') }}:
-              </td>
+              <td colspan="4" class="text-right">{{ $t('orders.total') }}:</td>
               <td class="text-right text-h6">
                 ${{ parseFloat(order.total_amount).toFixed(2) }}
               </td>
@@ -267,19 +219,9 @@
       </v-card>
     </div>
 
-    <div
-      v-else
-      class="text-center py-8"
-    >
-      <v-icon
-        size="64"
-        color="grey"
-      >
-        mdi-alert-circle
-      </v-icon>
-      <h2 class="text-h5 mt-4">
-        Order Not Found
-      </h2>
+    <div v-else class="text-center py-8">
+      <v-icon size="64" color="grey">mdi-alert-circle</v-icon>
+      <h2 class="text-h5 mt-4">Order Not Found</h2>
       <p class="text-subtitle-1 text-medium-emphasis">
         The requested order could not be found.
       </p>
@@ -294,10 +236,7 @@
     />
 
     <!-- Delete Confirmation Dialog -->
-    <v-dialog
-      v-model="deleteDialog.show"
-      max-width="400"
-    >
+    <v-dialog v-model="deleteDialog.show" max-width="400">
       <v-card>
         <v-card-title>{{ $t('confirmations.confirmDelete') }}</v-card-title>
         <v-card-text>
@@ -306,10 +245,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="deleteDialog.show = false"
-          >
+          <v-btn variant="text" @click="deleteDialog.show = false">
             {{ $t('common.cancel') }}
           </v-btn>
           <v-btn

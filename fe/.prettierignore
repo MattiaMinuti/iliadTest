@@ -50,3 +50,23 @@ package.json
 .eslintrc*
 .prettierignore
 .eslintignore
+
+# Files that change frequently and could cause loops
+**/node_modules/**
+**/.vite/**
+**/dist/**
+**/coverage/**
+**/.cache/**
+**/.temp/**
+**/.tmp/**
+**/*.log
+**/.DS_Store
+
+# IDE files
+.vscode/**
+.idea/**
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

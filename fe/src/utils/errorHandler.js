@@ -76,7 +76,7 @@ export function handleApiError(error, t) {
 export function showApiError(
   notificationStore,
   error,
-  t,
+  t
   // fallbackKey = 'messages.genericError',
 ) {
   const translatedMessage = handleApiError(error, t);

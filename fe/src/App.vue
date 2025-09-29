@@ -1,19 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar
-      color="primary"
-      dark
-      app
-      elevation="1"
-      height="64"
-    >
+    <v-app-bar color="primary" dark app elevation="1" height="64">
       <v-app-bar-title class="font-weight-bold">
-        <v-icon
-          class="mr-2"
-          size="28"
-        >
-          $clipboardList
-        </v-icon>
+        <v-icon class="mr-2" size="28">$clipboardList</v-icon>
         <span class="text-h5">{{ $t('app.title') }}</span>
       </v-app-bar-title>
 
@@ -21,26 +10,15 @@
 
       <LanguageSwitcher class="mr-2" />
 
-      <v-btn
-        icon
-        variant="text"
-        @click="toggleTheme"
-      >
+      <v-btn icon variant="text" @click="toggleTheme">
         <v-icon>{{ isDark ? '$brightness7' : '$brightness4' }}</v-icon>
-        <v-tooltip
-          activator="parent"
-          location="bottom"
-        >
+        <v-tooltip activator="parent" location="bottom">
           {{ $t('app.toggleTheme') }}
         </v-tooltip>
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      temporary
-    >
+    <v-navigation-drawer v-model="drawer" app temporary>
       <v-list>
         <v-list-item
           v-for="item in menuItems"
@@ -70,10 +48,7 @@
     >
       {{ snackbar.message }}
       <template #actions>
-        <v-btn
-          variant="text"
-          @click="snackbar.show = false"
-        >
+        <v-btn variant="text" @click="snackbar.show = false">
           {{ $t('common.close') }}
         </v-btn>
       </template>

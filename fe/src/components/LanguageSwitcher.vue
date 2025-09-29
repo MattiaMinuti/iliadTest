@@ -1,25 +1,15 @@
 <template>
   <v-menu>
     <template #activator="{ props }">
-      <v-btn
-        icon
-        variant="text"
-        v-bind="props"
-      >
+      <v-btn icon variant="text" v-bind="props">
         <span class="text-h6">{{ currentLocale.flag }}</span>
-        <v-tooltip
-          activator="parent"
-          location="bottom"
-        >
+        <v-tooltip activator="parent" location="bottom">
           {{ $t('app.changeLanguage') }}
         </v-tooltip>
       </v-btn>
     </template>
 
-    <v-list
-      density="compact"
-      min-width="160"
-    >
+    <v-list density="compact" min-width="160">
       <v-list-item
         v-for="locale in availableLocales"
         :key="locale.code"
@@ -30,16 +20,8 @@
           <span class="mr-3">{{ locale.flag }}</span>
         </template>
         <v-list-item-title>{{ locale.name }}</v-list-item-title>
-        <template
-          v-if="locale.code === currentLocale.code"
-          #append
-        >
-          <v-icon
-            color="primary"
-            size="small"
-          >
-            $check
-          </v-icon>
+        <template v-if="locale.code === currentLocale.code" #append>
+          <v-icon color="primary" size="small">$check</v-icon>
         </template>
       </v-list-item>
     </v-list>
@@ -49,10 +31,7 @@
 <script>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import {
-  setLocale,
-  getAvailableLocales,
-} from '@/plugins/i18n';
+import { setLocale, getAvailableLocales } from '@/plugins/i18n';
 
 export default {
   name: 'LanguageSwitcher',

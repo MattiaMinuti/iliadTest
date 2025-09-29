@@ -1,0 +1,45 @@
+module.exports = {
+  // Disabilita formattazione automatica per evitare loop con HMR
+  printWidth: 80,
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  singleQuote: true,
+  quoteProps: 'as-needed',
+  jsxSingleQuote: true,
+  trailingComma: 'es5',
+  bracketSpacing: true,
+  bracketSameLine: false,
+  arrowParens: 'avoid',
+  rangeStart: 0,
+  rangeEnd: Infinity,
+  requirePragma: false,
+  insertPragma: false,
+  proseWrap: 'preserve',
+  htmlWhitespaceSensitivity: 'css',
+  vueIndentScriptAndStyle: false,
+  endOfLine: 'lf',
+  embeddedLanguageFormatting: 'auto',
+  singleAttributePerLine: false,
+  
+  // Configurazione specifica per evitare loop
+  overrides: [
+    {
+      files: '*.vue',
+      options: {
+        // Configurazione più conservativa per Vue
+        printWidth: 100,
+        htmlWhitespaceSensitivity: 'ignore',
+        vueIndentScriptAndStyle: false,
+      },
+    },
+    {
+      files: '*.js',
+      options: {
+        // Configurazione più conservativa per JS
+        printWidth: 100,
+        trailingComma: 'none',
+      },
+    },
+  ],
+};

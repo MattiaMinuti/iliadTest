@@ -49,7 +49,7 @@ export default {
     quantity: 'Quantità',
     totalPrice: 'Prezzo Totale',
     orderNotFound: 'Ordine Non Trovato',
-    orderNotFoundDesc: 'L\'ordine richiesto non è stato trovato.',
+    orderNotFoundDesc: "L'ordine richiesto non è stato trovato.",
   },
 
   // Order Dialog
@@ -159,7 +159,7 @@ export default {
     deleteOrderFailed: 'Eliminazione ordine fallita',
     deleteProductFailed: 'Eliminazione prodotto fallita',
     insufficientStock: 'Scorta insufficiente per il prodotto: {product}',
-    addAtLeastOneProduct: 'Aggiungi almeno un prodotto all\'ordine',
+    addAtLeastOneProduct: "Aggiungi almeno un prodotto all'ordine",
     cannotDeleteProduct: 'Impossibile eliminare prodotto associato ad ordini',
     validationFailed: 'Validazione fallita',
     orderNotFound: 'Ordine non trovato',
