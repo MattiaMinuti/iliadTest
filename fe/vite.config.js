@@ -12,17 +12,18 @@ export default defineConfig({
   server: {
     port: 3000,
     host: '0.0.0.0',
+    allowedHosts: ['iliadlocal', 'iliadLocal', 'localhost'],
     watch: {
       usePolling: true,
       interval: 1000,
     },
     hmr: {
-      port: 3000,
-      host: 'localhost',
+      port: 80,
+      host: 'iliadLocal',
     },
     proxy: {
       '/api': {
-        target: 'http://backend:8000',
+        target: 'http://iliadApi:8000',
         changeOrigin: true,
       },
     },

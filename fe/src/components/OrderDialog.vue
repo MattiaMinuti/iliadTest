@@ -14,10 +14,16 @@
         }}
       </v-card-title>
 
-      <v-form ref="form" @submit.prevent="saveOrder">
+      <v-form
+        ref="form"
+        @submit.prevent="saveOrder"
+      >
         <v-card-text>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="formData.name"
                 :label="$t('orderDialog.orderName') + ' *'"
@@ -26,7 +32,10 @@
                 required
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 v-model="formData.order_date"
                 :label="$t('orderDialog.orderDate') + ' *'"
@@ -39,7 +48,10 @@
           </v-row>
 
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-select
                 v-model="formData.status"
                 :items="statusOptions"
@@ -47,7 +59,10 @@
                 variant="outlined"
               />
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-text-field
                 :model-value="totalAmount"
                 :label="$t('orderDialog.totalAmount')"
@@ -77,8 +92,14 @@
               <h3 class="text-h6">
                 {{ $t('orderDialog.orderProducts') }}
               </h3>
-              <v-btn color="primary" size="small" @click="addProduct">
-                <v-icon start>$plus</v-icon>
+              <v-btn
+                color="primary"
+                size="small"
+                @click="addProduct"
+              >
+                <v-icon start>
+                  $plus
+                </v-icon>
                 {{ $t('orderDialog.addProduct') }}
               </v-btn>
             </div>
@@ -100,7 +121,10 @@
             >
               <v-card-text>
                 <v-row align="center">
-                  <v-col cols="12" md="5">
+                  <v-col
+                    cols="12"
+                    md="5"
+                  >
                     <v-autocomplete
                       v-model="productOrder.product_id"
                       :items="availableProducts"
@@ -124,7 +148,10 @@
                       </template>
                     </v-autocomplete>
                   </v-col>
-                  <v-col cols="12" md="3">
+                  <v-col
+                    cols="12"
+                    md="3"
+                  >
                     <v-text-field
                       v-model.number="productOrder.quantity"
                       :label="$t('orderDetail.quantity') + ' *'"
@@ -136,7 +163,10 @@
                       @input="calculateTotal"
                     />
                   </v-col>
-                  <v-col cols="12" md="3">
+                  <v-col
+                    cols="12"
+                    md="3"
+                  >
                     <v-text-field
                       :model-value="getProductTotal(index)"
                       :label="$t('orders.total')"
@@ -146,7 +176,10 @@
                       prepend-inner-icon="$currencyUsd"
                     />
                   </v-col>
-                  <v-col cols="12" md="1">
+                  <v-col
+                    cols="12"
+                    md="1"
+                  >
                     <v-btn
                       icon
                       size="small"
@@ -165,7 +198,10 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="closeDialog">
+          <v-btn
+            variant="text"
+            @click="closeDialog"
+          >
             {{ $t('orderDialog.cancel') }}
           </v-btn>
           <v-btn
@@ -237,7 +273,7 @@ export default {
       return formData.products
         .reduce((sum, product) => {
           const productData = availableProducts.value.find(
-            p => p.id === product.product_id
+            p => p.id === product.product_id,
           );
           if (productData && product.quantity) {
             return sum + productData.price * product.quantity;
@@ -262,7 +298,7 @@ export default {
           notificationStore,
           error,
           t,
-          'messages.loadProductsFailed'
+          'messages.loadProductsFailed',
         );
       }
     };
@@ -289,7 +325,7 @@ export default {
     const getProductTotal = index => {
       const product = formData.products[index];
       const productData = availableProducts.value.find(
-        p => p.id === product.product_id
+        p => p.id === product.product_id,
       );
       if (productData && product.quantity) {
         return (productData.price * product.quantity).toFixed(2);
@@ -383,7 +419,7 @@ export default {
           }
           loadProducts();
         }
-      }
+      },
     );
 
     // Watch for order changes to populate form data
@@ -394,7 +430,7 @@ export default {
           populateForm();
         }
       },
-      { deep: true }
+      { deep: true },
     );
 
     // Handle ESC key to close dialog

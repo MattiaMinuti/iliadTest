@@ -68,7 +68,7 @@ docker-compose logs -f
 This will start:
 - **MySQL Database** on port 3306
 - **Backend API** on port 8000
-- **Frontend Application** on port 3000
+- **Frontend Application** on port 80 (accessible via http://iliadlocal)
 
 ### 3. Initialize the Database
 ```bash
@@ -83,7 +83,27 @@ php artisan db:seed
 ```
 
 ### 4. Access the Application
-- **Frontend**: http://localhost:3000
+
+#### Option 1: Custom Domain (Recommended)
+For a professional development experience, you can access the application using a custom domain:
+
+1. **Add to hosts file** (one-time setup):
+   ```bash
+   # On macOS/Linux
+   echo "127.0.0.1 iliadlocal iliadApi" | sudo tee -a /etc/hosts
+   
+   # On Windows (run as Administrator)
+   echo 127.0.0.1 iliadlocal iliadApi >> C:\Windows\System32\drivers\etc\hosts
+   ```
+
+2. **Access the application**:
+   - **Frontend**: http://iliadlocal (clean URL without port)
+   - **Backend API**: http://iliadApi:8000 (professional API domain)
+
+> 📖 **Detailed Setup Guide**: See [Custom Domain Setup](docs/CUSTOM_DOMAIN_SETUP.md) for comprehensive instructions, troubleshooting, and advanced configuration options.
+
+#### Option 2: Standard URLs
+- **Frontend**: http://localhost:80 or http://localhost
 - **Backend API**: http://localhost:8000
 
 ### 5. Database Management

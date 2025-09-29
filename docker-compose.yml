@@ -32,7 +32,9 @@ services:
       - DB_USERNAME=app_user
       - DB_PASSWORD=app_password
     ports:
-      - "8000:8000"
+      - "8080:8000"
+    extra_hosts:
+      - "iliadApi:127.0.0.1"
     volumes:
       - ./be:/var/www/html
       - ./be/storage:/var/www/html/storage
@@ -50,11 +52,9 @@ services:
     container_name: gestionale_iliad_frontend
     restart: unless-stopped
     environment:
-      - VITE_API_URL=http://localhost:8000/api/v1
+      - VITE_API_URL=http://iliadApi/api/v1
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-    ports:
-      - "3000:3000"
     volumes:
       - ./fe:/app
       - /app/node_modules
@@ -65,6 +65,21 @@ services:
       - app-network
     stdin_open: true
     tty: true
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: gestionale_iliad_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
 
 
 volumes:
