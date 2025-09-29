@@ -17,6 +17,9 @@ module.exports = {
     'vue/require-default-prop': 'off',
     'vue/require-prop-types': 'warn',
     'vue/valid-v-slot': 'off', // Disable v-slot modifier check
+    'vue/max-attributes-per-line': 'off', // Allow multiple attributes on same line
+    'vue/html-indent': 'off', // Disable HTML indentation rules
+    'vue/singleline-html-element-content-newline': 'off', // Allow single line elements
 
     // General JavaScript rules
     'no-console': 'off', // Allow console for development

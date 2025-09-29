@@ -2,6 +2,20 @@ import { createI18n } from 'vue-i18n';
 import en from '@/locales/en.js';
 import it from '@/locales/it.js';
 
+/**
+ * @typedef {Object} I18nInstance
+ * @property {Function} t - Translation function
+ * @property {Function} tc - Translation choice function
+ * @property {Function} te - Translation exists function
+ * @property {Function} d - Date formatting function
+ * @property {Function} n - Number formatting function
+ */
+
+/**
+ * Global i18n instance with translation functions
+ * @type {I18nInstance}
+ */
+
 // Get saved language from localStorage or default to Italian
 const savedLocale = localStorage.getItem('locale') || 'it';
 
