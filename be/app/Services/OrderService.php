@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Dao\OrderDao;
 use App\Dao\ProductDao;
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrderService extends BaseService

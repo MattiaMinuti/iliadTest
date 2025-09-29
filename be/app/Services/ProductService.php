@@ -141,5 +141,4 @@ class ProductService extends BaseService
     {
         return $this->dao->getLowStock($threshold);
     }
-
 }
