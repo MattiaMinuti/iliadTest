@@ -32,17 +32,5 @@ module.exports = {
     // Code style - Let Prettier handle formatting
     // Removed: indent, quotes, semi, comma-dangle, object-curly-spacing, array-bracket-spacing
   },
-  overrides: [
-    {
-      files: ['*.ts', '*.tsx', '*.d.ts'],
-      parser: '@typescript-eslint/parser',
-      plugins: ['@typescript-eslint'],
-      rules: {
-        'no-unused-vars': 'off',
-        '@typescript-eslint/no-unused-vars': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-      },
-    },
-  ],
   ignorePatterns: ['dist/', 'node_modules/', '*.min.js'],
 };
