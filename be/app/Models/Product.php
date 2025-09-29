@@ -38,4 +38,28 @@ class Product extends Model
     {
         return $this->stock_quantity >= $quantity;
     }
+
+
+    //Used for seeding
+    /**
+     * Reduce stock quantity for this product.
+     */
+    public function reduceStock(int $quantity): bool
+    {
+        if ($this->hasStock($quantity)) {
+            $this->stock_quantity -= $quantity;
+            return $this->save();
+        }
+        
+        return false;
+    }
+
+    /**
+     * Add stock quantity for this product.
+     */
+    public function addStock(int $quantity): bool
+    {
+        $this->stock_quantity += $quantity;
+        return $this->save();
+    }
 }

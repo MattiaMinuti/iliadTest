@@ -63,6 +63,8 @@ This will install:
 
 ## 🚀 Quick Start with Docker
 
+> **⚠️ Important**: Follow these steps in the exact order shown to avoid common setup issues. The backend dependencies must be installed before running database migrations.
+
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
@@ -80,29 +82,36 @@ docker-compose logs -f
 
 This will start:
 - **MySQL Database** on port 3306
-- **Backend API** on port 8000
-- **Frontend Application** on port 80 (accessible via http://iliadlocal)
+- **Backend API** on port 8080
+- **Frontend Application** on port 80 (accessible via http://localhost)
 
-### 3. Initialize the Database
+### 3. Install Backend Dependencies
 ```bash
-# Access the backend container
-docker-compose exec backend bash
-
-# Run migrations
-php artisan migrate
-
-# Seed the database with sample data
-php artisan db:seed
+# Install PHP dependencies in the backend container
+docker-compose exec backend composer install
 ```
 
-### 4. Access the Application
+### 4. Initialize the Database
+```bash
+# Run migrations and seed the database with sample data
+docker-compose exec backend bash -c "php artisan migrate:fresh --force && php artisan db:seed --force"
+```
 
-#### Option 1: Custom Domain (Recommended)
-For a professional development experience, you can access the application using a custom domain:
+> **Note**: We use `migrate:fresh --force` to ensure a clean database setup and `--force` flag to bypass production environment warnings.
+
+### 5. Access the Application
+
+#### Option 1: Standard URLs (Recommended for Quick Start)
+- **Frontend**: http://localhost
+- **Backend API**: http://localhost:8080
+- **API Documentation**: http://localhost:8080/swagger
+
+#### Option 2: Custom Domain (Optional)
+For a professional development experience, you can access the application using custom domains:
 
 1. **Add to hosts file** (one-time setup):
    ```bash
-   # On macOS/Linux
+   # On macOS/Linux (requires sudo password)
    echo "127.0.0.1 iliadlocal iliadApi" | sudo tee -a /etc/hosts
    
    # On Windows (run as Administrator)
@@ -115,11 +124,56 @@ For a professional development experience, you can access the application using 
 
 > 📖 **Detailed Setup Guide**: See [Custom Domain Setup](docs/CUSTOM_DOMAIN_SETUP.md) for comprehensive instructions, troubleshooting, and advanced configuration options.
 
-#### Option 2: Standard URLs
-- **Frontend**: http://localhost:80 or http://localhost
-- **Backend API**: http://localhost:8000
+### 6. Troubleshooting
 
-### 5. Database Management
+#### Common Issues and Solutions
+
+**Issue**: `Failed to open stream: No such file or directory in /var/www/html/vendor/autoload.php`
+```bash
+# Solution: Install Composer dependencies first
+docker-compose exec backend composer install
+```
+
+**Issue**: `Call to undefined method App\Models\Product::reduceStock()`
+```bash
+# Solution: This method is now included in the Product model
+# If you encounter this error, make sure you have the latest code
+git pull origin main
+```
+
+**Issue**: `SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry`
+```bash
+# Solution: Use migrate:fresh to reset the database
+docker-compose exec backend bash -c "php artisan migrate:fresh --force && php artisan db:seed --force"
+```
+
+**Issue**: `Do you really wish to run this command? (yes/no) [no]`
+```bash
+# Solution: Use --force flag for production environment
+docker-compose exec backend bash -c "php artisan migrate --force"
+```
+
+### 7. Verify Setup
+
+After completing the setup, verify that everything is working correctly:
+
+```bash
+# Check if all containers are running
+docker-compose ps
+
+# Test the API
+curl http://localhost:8080/api/v1/products
+
+# Test the frontend
+curl http://localhost
+```
+
+**Expected Results:**
+- All containers should show "Up" status
+- API should return JSON with products data
+- Frontend should return HTML content
+
+### 8. Database Management
 For database management, we recommend using **TablePlus** (modern, fast, and user-friendly):
 
 **Connection Settings:**
@@ -198,8 +252,8 @@ If you prefer to run the application without Docker:
 4. **Set up database**
    ```bash
    # Create MySQL database named 'order_management'
-   php artisan migrate
-   php artisan db:seed
+   php artisan migrate:fresh --force
+   php artisan db:seed --force
    ```
 
 5. **Start the backend server**
