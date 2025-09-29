@@ -206,20 +206,4 @@ class OrderService extends BaseService
             }
         }
     }
-
-    /**
-     * Get orders by status.
-     */
-    public function getOrdersByStatus(string $status): Collection
-    {
-        return $this->dao->getByStatus($status);
-    }
-
-    /**
-     * Get orders by date range.
-     */
-    public function getOrdersByDateRange(string $startDate, string $endDate): Collection
-    {
-        return $this->dao->getByDateRange($startDate, $endDate);
-    }
 }

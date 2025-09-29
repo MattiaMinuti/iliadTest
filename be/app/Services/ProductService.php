@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dao\ProductDao;
 use App\Models\Product;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -24,12 +25,13 @@ class ProductService extends BaseService
 
     /**
      * Create product with validation.
+     * @throws Exception
      */
     public function createProduct(array $productData): Product
     {
         // Validate SKU uniqueness
         if ($this->dao->findBySku($productData['sku'])) {
-            throw new \Exception("Product with SKU '{$productData['sku']}' already exists");
+            throw new Exception("Product with SKU '{$productData['sku']}' already exists");
         }
 
         return $this->dao->create($productData);
@@ -44,7 +46,7 @@ class ProductService extends BaseService
         if (isset($productData['sku'])) {
             $existingProduct = $this->dao->findBySku($productData['sku']);
             if ($existingProduct && $existingProduct->id !== $product->id) {
-                throw new \Exception("Product with SKU '{$productData['sku']}' already exists");
+                throw new Exception("Product with SKU '{$productData['sku']}' already exists");
             }
         }
 
@@ -54,12 +56,13 @@ class ProductService extends BaseService
 
     /**
      * Delete product with validation.
+     * @throws Exception
      */
     public function deleteProduct(Product $product): bool
     {
         // Check if product is associated with any orders
         if ($product->orders()->exists()) {
-            throw new \Exception('Cannot delete product that is associated with orders');
+            throw new Exception('Cannot delete product that is associated with orders');
         }
 
         return $this->dao->delete($product);
@@ -67,11 +70,12 @@ class ProductService extends BaseService
 
     /**
      * Update product stock.
+     * @throws Exception
      */
     public function updateStock(Product $product, int $newStock): Product
     {
         if ($newStock < 0) {
-            throw new \Exception('Stock quantity cannot be negative');
+            throw new Exception('Stock quantity cannot be negative');
         }
 
         $this->dao->updateStock($product, $newStock);
@@ -80,15 +84,16 @@ class ProductService extends BaseService
 
     /**
      * Reduce product stock.
+     * @throws Exception
      */
     public function reduceStock(Product $product, int $quantity): Product
     {
         if ($quantity <= 0) {
-            throw new \Exception('Quantity must be greater than 0');
+            throw new Exception('Quantity must be greater than 0');
         }
 
         if (! $product->hasStock($quantity)) {
-            throw new \Exception("Insufficient stock for product: {$product->name}");
+            throw new Exception("Insufficient stock for product: {$product->name}");
         }
 
         $newStock = $product->stock_quantity - $quantity;
@@ -99,11 +104,12 @@ class ProductService extends BaseService
 
     /**
      * Increase product stock.
+     * @throws Exception
      */
     public function increaseStock(Product $product, int $quantity): Product
     {
         if ($quantity <= 0) {
-            throw new \Exception('Quantity must be greater than 0');
+            throw new Exception('Quantity must be greater than 0');
         }
 
         $newStock = $product->stock_quantity + $quantity;
@@ -136,35 +142,4 @@ class ProductService extends BaseService
         return $this->dao->getLowStock($threshold);
     }
 
-    /**
-     * Get products with orders.
-     */
-    public function getProductsWithOrders(): Collection
-    {
-        return $this->dao->getWithOrders();
-    }
-
-    /**
-     * Get ordered products.
-     */
-    public function getOrderedProducts(): Collection
-    {
-        return $this->dao->getOrderedProducts();
-    }
-
-    /**
-     * Check if product has sufficient stock.
-     */
-    public function hasStock(Product $product, int $quantity): bool
-    {
-        return $product->stock_quantity >= $quantity;
-    }
-
-    /**
-     * Get product by SKU.
-     */
-    public function getProductBySku(string $sku): ?Product
-    {
-        return $this->dao->findBySku($sku);
-    }
 }

@@ -83,28 +83,4 @@ class OrderDao extends BaseDao
 
         $order->products()->sync($productsToSync);
     }
-
-    /**
-     * Detach all products from order.
-     */
-    public function detachAllProducts(Order $order): void
-    {
-        $order->products()->detach();
-    }
-
-    /**
-     * Get orders by status.
-     */
-    public function getByStatus(string $status): Collection
-    {
-        return $this->model->where('status', $status)->get();
-    }
-
-    /**
-     * Get orders by date range.
-     */
-    public function getByDateRange(string $startDate, string $endDate): Collection
-    {
-        return $this->model->whereBetween('order_date', [$startDate, $endDate])->get();
-    }
 }

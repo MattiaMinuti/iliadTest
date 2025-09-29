@@ -88,20 +88,4 @@ class ProductDao extends BaseDao
     {
         return $product->update(['stock_quantity' => $newStock]);
     }
-
-    /**
-     * Get products with orders relationship.
-     */
-    public function getWithOrders(): Collection
-    {
-        return $this->model->with('orders')->get();
-    }
-
-    /**
-     * Get products that have been ordered.
-     */
-    public function getOrderedProducts(): Collection
-    {
-        return $this->model->whereHas('orders')->get();
-    }
 }
