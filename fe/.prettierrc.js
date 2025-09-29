@@ -38,7 +38,7 @@ module.exports = {
       options: {
         // Configurazione più conservativa per JS
         printWidth: 100,
-        trailingComma: 'none',
+        trailingComma: 'es5', // Allineato con configurazione globale
       },
     },
   ],

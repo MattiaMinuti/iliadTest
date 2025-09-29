@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended'],
+  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'prettier'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -29,13 +29,20 @@ module.exports = {
     'prefer-const': 'warn',
     'no-var': 'error',
 
-    // Code style
-    indent: ['error', 2],
-    quotes: ['error', 'single'],
-    semi: ['error', 'always'],
-    'comma-dangle': ['error', 'always-multiline'],
-    'object-curly-spacing': ['error', 'always'],
-    'array-bracket-spacing': ['error', 'never'],
+    // Code style - Let Prettier handle formatting
+    // Removed: indent, quotes, semi, comma-dangle, object-curly-spacing, array-bracket-spacing
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '*.d.ts'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      rules: {
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+  ],
   ignorePatterns: ['dist/', 'node_modules/', '*.min.js'],
 };
