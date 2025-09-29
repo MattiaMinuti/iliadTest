@@ -63,7 +63,7 @@ return (new PhpCsFixer\Config())
 
         // String formatting
         'single_quote' => true,
-        'escape_implicit_backslashes' => true,
+        'string_implicit_backslashes' => true,
 
         // Other rules
         'no_extra_blank_lines' => [

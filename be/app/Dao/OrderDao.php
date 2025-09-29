@@ -3,7 +3,9 @@
 namespace App\Dao;
 
 use App\Models\Order;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrderDao extends BaseDao
@@ -14,19 +16,11 @@ class OrderDao extends BaseDao
     }
 
     /**
-     * Get orders with products relationship.
-     */
-    public function getWithProducts(): Collection
-    {
-        return $this->model->with('products')->get();
-    }
-
-    /**
      * Get order by ID with products.
      */
-    public function findByIdWithProducts(int $id): ?Order
+    public function findByIdWithProducts(int $id): Builder|array|Collection|Model
     {
-        return $this->model->with('products')->find($id);
+        return $this->model->newQuery()->with('products')->find($id);
     }
 
     /**
@@ -54,8 +48,8 @@ class OrderDao extends BaseDao
         if (isset($filters['search']) && $filters['search']) {
             $searchTerm = $filters['search'];
             $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', "%{$searchTerm}%")
-                    ->orWhere('description', 'like', "%{$searchTerm}%");
+                $q->where('name', 'like', "%$searchTerm%")
+                    ->orWhere('description', 'like', "%$searchTerm%");
             });
         }
 

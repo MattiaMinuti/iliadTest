@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 abstract class BaseDao
 {
-    protected $model;
+    protected Model $model;
 
     public function __construct(Model $model)
     {
@@ -20,7 +20,7 @@ abstract class BaseDao
      */
     public function findById(int $id): ?Model
     {
-        return $this->model->find($id);
+        return $this->model::find($id);
     }
 
     /**
@@ -28,7 +28,7 @@ abstract class BaseDao
      */
     public function findByIdOrFail(int $id): Model
     {
-        return $this->model->findOrFail($id);
+        return $this->model::findOrFail($id);
     }
 
     /**
@@ -36,7 +36,7 @@ abstract class BaseDao
      */
     public function getAll(): Collection
     {
-        return $this->model->all();
+        return $this->model::all();
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class BaseDao
      */
     public function create(array $data): Model
     {
-        return $this->model->create($data);
+        return $this->model::create($data);
     }
 
     /**
@@ -68,32 +68,6 @@ abstract class BaseDao
      */
     public function paginate(int $perPage = 15): LengthAwarePaginator
     {
-        return $this->model->paginate($perPage);
-    }
-
-    /**
-     * Get models with relationships.
-     */
-    public function getWithRelations(array $relations): Collection
-    {
-        return $this->model->with($relations)->get();
-    }
-
-    /**
-     * Find models with conditions.
-     */
-    public function findBy(array $conditions): Collection
-    {
-        $query = $this->model->newQuery();
-
-        foreach ($conditions as $field => $value) {
-            if (is_array($value)) {
-                $query->whereIn($field, $value);
-            } else {
-                $query->where($field, $value);
-            }
-        }
-
-        return $query->get();
+        return $this->model::paginate($perPage);
     }
 }

@@ -33,9 +33,9 @@ class ProductDao extends BaseDao
         if (isset($filters['search']) && $filters['search']) {
             $searchTerm = $filters['search'];
             $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', "%{$searchTerm}%")
-                    ->orWhere('sku', 'like', "%{$searchTerm}%")
-                    ->orWhere('description', 'like', "%{$searchTerm}%");
+                $q->where('name', 'like', "%$searchTerm%")
+                    ->orWhere('sku', 'like', "%$searchTerm%")
+                    ->orWhere('description', 'like', "%$searchTerm%");
             });
         }
 
@@ -52,7 +52,7 @@ class ProductDao extends BaseDao
      */
     public function getByStockLevel(int $minStock = 0): Collection
     {
-        return $this->model->where('stock_quantity', '>=', $minStock)->get();
+        return $this->model->newQuery()->where('stock_quantity', '>=', $minStock)->get();
     }
 
     /**
@@ -60,7 +60,7 @@ class ProductDao extends BaseDao
      */
     public function getOutOfStock(): Collection
     {
-        return $this->model->where('stock_quantity', '=', 0)->get();
+        return $this->model->newQuery()->where('stock_quantity', '=', 0)->get();
     }
 
     /**
@@ -68,7 +68,8 @@ class ProductDao extends BaseDao
      */
     public function getLowStock(int $threshold = 10): Collection
     {
-        return $this->model->where('stock_quantity', '>', 0)
+        return $this->model->newQuery()
+            ->where('stock_quantity', '>', 0)
             ->where('stock_quantity', '<=', $threshold)
             ->get();
     }
@@ -76,9 +77,9 @@ class ProductDao extends BaseDao
     /**
      * Find product by SKU.
      */
-    public function findBySku(string $sku): ?Product
+    public function findBySku(string $sku): object
     {
-        return $this->model->where('sku', $sku)->first();
+        return $this->model->newQuery()->where('sku', $sku)->first();
     }
 
     /**

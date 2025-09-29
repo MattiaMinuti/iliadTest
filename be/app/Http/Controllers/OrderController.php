@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\OrderValidation;
+use App\Models\Order;
 use App\Services\OrderService;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
     use OrderValidation;
 
-    protected $orderService;
+    protected OrderService $orderService;
 
     public function __construct(OrderService $orderService)
     {
@@ -29,19 +30,19 @@ class OrderController extends Controller
             $this->validateOrderFilter($request);
 
             $filters = [
-                'start_date' => $request->get('start_date'),
-                'end_date' => $request->get('end_date'),
-                'status' => $request->get('status'),
-                'search' => $request->get('search'),
-                'sort_by' => $request->get('sort_by', 'order_date'),
-                'sort_order' => $request->get('sort_direction', 'desc'),
+                'start_date' => $request->input('start_date'),
+                'end_date' => $request->input('end_date'),
+                'status' => $request->input('status'),
+                'search' => $request->input('search'),
+                'sort_by' => $request->input('sort_by', 'order_date'),
+                'sort_order' => $request->input('sort_direction', 'desc'),
             ];
 
             $perPage = $request->get('per_page', 15);
             $orders = $this->orderService->getOrdersWithFilters($filters, $perPage);
 
             return $this->paginatedResponse($orders, 'Orders retrieved successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->serverErrorResponse('Failed to retrieve orders: ' . $e->getMessage());
         }
     }
@@ -55,11 +56,11 @@ class OrderController extends Controller
             $this->validateOrderCreate($request);
 
             $orderData = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'order_date' => $request->order_date,
-                'status' => $request->get('status', 'pending'),
-                'products' => $request->products,
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'order_date' => $request->input('order_date'),
+                'status' => $request->input('status', 'pending'),
+                'products' => $request->input('products'),
             ];
 
             $order = $this->orderService->createOrder($orderData);
@@ -67,7 +68,9 @@ class OrderController extends Controller
             return $this->createdResponse($order, 'Order created successfully');
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e->errors());
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->validationErrorResponse($e->errors());
+        } catch (Exception $e) {
             return $this->serverErrorResponse($e->getMessage());
         }
     }
@@ -85,7 +88,7 @@ class OrderController extends Controller
             }
 
             return $this->successResponse($order, 'Order retrieved successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->serverErrorResponse('Failed to retrieve order: ' . $e->getMessage());
         }
     }
@@ -96,6 +99,7 @@ class OrderController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         try {
+            /** @var Order $order */
             $order = $this->orderService->findByIdOrFail($id);
 
             $this->validateOrderUpdate($request);
@@ -103,17 +107,15 @@ class OrderController extends Controller
             $orderData = $request->only(['name', 'description', 'order_date', 'status']);
 
             if ($request->has('products')) {
-                $orderData['products'] = $request->products;
+                $orderData['products'] = $request->input('products');
             }
 
             $order = $this->orderService->updateOrder($order, $orderData);
 
             return $this->updatedResponse($order, 'Order updated successfully');
-        } catch (ValidationException $e) {
-            return $this->validationErrorResponse($e->errors());
-        } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException) {
             return $this->notFoundResponse('Order not found');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->serverErrorResponse('Failed to update order: ' . $e->getMessage());
         }
     }
@@ -124,13 +126,14 @@ class OrderController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
+            /** @var Order $order */
             $order = $this->orderService->findByIdOrFail($id);
             $this->orderService->deleteOrder($order);
 
             return $this->deletedResponse('Order deleted successfully');
-        } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException) {
             return $this->notFoundResponse('Order not found');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->serverErrorResponse('Failed to delete order: ' . $e->getMessage());
         }
     }
