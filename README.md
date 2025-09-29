@@ -67,7 +67,7 @@ This will install:
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/MattiaMinuti/iliadTest.git
 cd iliad
 ```
 
@@ -112,10 +112,10 @@ For a professional development experience, you can access the application using 
 1. **Add to hosts file** (one-time setup):
    ```bash
    # On macOS/Linux (requires sudo password)
-   echo "127.0.0.1 iliadlocal iliadApi" | sudo tee -a /etc/hosts
+   echo "127.0.0.1 iliadLocal iliadApi" | sudo tee -a /etc/hosts
    
    # On Windows (run as Administrator)
-   echo 127.0.0.1 iliadlocal iliadApi >> C:\Windows\System32\drivers\etc\hosts
+   echo 127.0.0.1 iliadLocal iliadApi >> C:\Windows\System32\drivers\etc\hosts
    ```
 
 2. **Access the application**:
@@ -132,13 +132,6 @@ For a professional development experience, you can access the application using 
 ```bash
 # Solution: Install Composer dependencies first
 docker-compose exec backend composer install
-```
-
-**Issue**: `Call to undefined method App\Models\Product::reduceStock()`
-```bash
-# Solution: This method is now included in the Product model
-# If you encounter this error, make sure you have the latest code
-git pull origin main
 ```
 
 **Issue**: `SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry`
