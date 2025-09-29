@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Cache directories
+.cache/
+.temp/
+.tmp/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+
+# Generated files
+*.min.js
+*.min.css
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ESLint cache
+.eslintcache
+
+# Configuration files that could cause HMR loops
+vite.config.js
+vite.config.ts
+vite.config.mjs
+package.json
+.prettierrc*
+.eslintrc*
+.prettierignore
+.eslintignore
