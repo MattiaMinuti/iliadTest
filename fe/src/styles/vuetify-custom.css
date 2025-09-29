@@ -1,0 +1,46 @@
+/* Custom CSS variables for Vuetify 3 */
+:root {
+  --v-theme-primary: 230, 0, 18; /* RGB values for #E60012 */
+  --v-theme-secondary: 51, 51, 51; /* RGB values for #333333 */
+  --v-theme-accent: 255, 105, 0; /* RGB values for #FF6900 */
+  --v-theme-error: 230, 0, 18; /* RGB values for #E60012 */
+  --v-theme-info: 255, 105, 0; /* RGB values for #FF6900 */
+  --v-theme-success: 76, 175, 80; /* RGB values for #4CAF50 */
+  --v-theme-warning: 255, 105, 0; /* RGB values for #FF6900 */
+  --v-theme-background: 255, 255, 255; /* RGB values for #FFFFFF */
+  --v-theme-surface: 245, 245, 245; /* RGB values for #F5F5F5 */
+}
+
+/* Dark theme */
+[data-theme='dark'] {
+  --v-theme-primary: 255, 105, 0; /* RGB values for #FF6900 */
+  --v-theme-secondary: 224, 224, 224; /* RGB values for #E0E0E0 */
+  --v-theme-accent: 230, 0, 18; /* RGB values for #E60012 */
+  --v-theme-error: 255, 82, 82; /* RGB values for #FF5252 */
+  --v-theme-info: 255, 105, 0; /* RGB values for #FF6900 */
+  --v-theme-success: 76, 175, 80; /* RGB values for #4CAF50 */
+  --v-theme-warning: 255, 152, 0; /* RGB values for #FF9800 */
+  --v-theme-background: 18, 18, 18; /* RGB values for #121212 */
+  --v-theme-surface: 30, 30, 30; /* RGB values for #1E1E1E */
+}
+
+/* Utility classes for common patterns */
+.bg-primary-10 {
+  background-color: rgba(var(--v-theme-primary), 0.1);
+}
+
+.bg-primary-20 {
+  background-color: rgba(var(--v-theme-primary), 0.2);
+}
+
+.bg-primary-30 {
+  background-color: rgba(var(--v-theme-primary), 0.3);
+}
+
+.text-primary {
+  color: rgb(var(--v-theme-primary));
+}
+
+.border-primary {
+  border-color: rgb(var(--v-theme-primary));
+}
