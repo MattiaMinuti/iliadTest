@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Gestionale Iliad Frontend Pre-commit Hook
+# This hook runs frontend quality checks on modified files only
+
+echo "🎨 Running frontend quality checks..."
+
+# Check if frontend files were modified (only .js and .vue files)
+FRONTEND_FILES=$(git diff --cached --name-only | grep -E '^fe/.*\.(js|vue)$')
+
+if [ -z "$FRONTEND_FILES" ]; then
+    echo "✅ No frontend files modified, skipping checks"
+    exit 0
+fi
+
+echo "📝 Frontend files modified:"
+echo "$FRONTEND_FILES"
+echo ""
+
+# Check if frontend container is running
+if ! docker-compose ps frontend | grep -q "Up"; then
+    echo "❌ Frontend container is not running"
+    echo "Please start with: docker-compose up -d frontend"
+    echo ""
+    echo "To skip this check, use: git commit --no-verify"
+    exit 1
+fi
+
+echo "✅ Frontend container is running, executing quality checks..."
+
+    # Run Prettier auto-fix and check
+    echo "🎨 Running Prettier auto-fix on frontend files..."
+    MODIFIED_FRONTEND_FILES=$(echo "$FRONTEND_FILES" | sed 's|^fe/||')
+
+    if [ -n "$MODIFIED_FRONTEND_FILES" ]; then
+        echo "📁 Processing files: $MODIFIED_FRONTEND_FILES"
+
+        # Run Prettier auto-fix first
+        echo "🎨 Running Prettier auto-fix..."
+        docker-compose exec -T frontend npx prettier --write --ignore-path .prettierignore $MODIFIED_FRONTEND_FILES
+        PRETTIER_FIX_RESULT=$?
+
+        if [ $PRETTIER_FIX_RESULT -eq 0 ]; then
+            echo "✅ Prettier auto-fix completed"
+            
+            # Stage the fixed files
+            echo "📝 Staging auto-fixed files..."
+            git add $FRONTEND_FILES
+            
+            # Run final check to ensure everything is properly formatted
+            echo "🔍 Running final Prettier check..."
+            docker-compose exec -T frontend npx prettier --check --ignore-path .prettierignore $MODIFIED_FRONTEND_FILES
+            PRETTIER_CHECK_RESULT=$?
+            
+            if [ $PRETTIER_CHECK_RESULT -eq 0 ]; then
+                echo "✅ All files properly formatted"
+            else
+                echo "❌ Some files still need manual formatting"
+                echo "💡 Run: cd fe && npm run format"
+                exit 1
+            fi
+        else
+            echo "❌ Prettier auto-fix failed"
+            echo "💡 Run: cd fe && npm run format"
+            exit 1
+        fi
+    echo "✅ Frontend files formatting is correct"
+else
+    echo "✅ No frontend files to check"
+fi
+
+echo ""
+echo "🎉 Frontend quality checks passed! Proceeding with commit..."
+exit 0

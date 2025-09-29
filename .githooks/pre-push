@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Gestionale Iliad Pre-push Hook
+# This hook runs API tests before pushing to main branch
+
+echo "🚀 Running pre-push tests..."
+
+# Get the remote branch being pushed to
+REMOTE_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | sed 's/origin\///')
+
+# If no remote branch, check if we're pushing to main
+if [ -z "$REMOTE_BRANCH" ]; then
+    # Check if any of the commits being pushed are going to main
+    if git rev-list --count origin/main..HEAD > /dev/null 2>&1; then
+        REMOTE_BRANCH="main"
+    fi
+fi
+
+# Only run tests when pushing to main branch
+if [ "$REMOTE_BRANCH" != "main" ]; then
+    echo "✅ Not pushing to main branch ($REMOTE_BRANCH), skipping tests"
+    echo "💡 Tests will run automatically when pushing to main"
+    exit 0
+fi
+
+echo "🎯 Pushing to main branch - running API tests..."
+
+# Load environment variables if available
+if [ -f "env.local" ]; then
+    export $(grep -v '^#' env.local | xargs)
+fi
+
+# Check if backend is running (try both localhost and custom domain)
+BACKEND_URL="http://${BACKEND_HOST:-iliadApi}"
+if ! curl -s http://localhost:8000/ > /dev/null 2>&1 && ! curl -s "$BACKEND_URL/" > /dev/null 2>&1; then
+    echo "❌ Backend is not running at http://localhost:8000 or $BACKEND_URL"
+    echo "Please start the backend with: docker-compose up -d"
+    echo ""
+    echo "To skip this check, use: git push --no-verify"
+    exit 1
+fi
+
+echo "✅ Backend is running, executing tests..."
+
+# Run PHPUnit tests
+cd be/tests
+
+# Check if PHPUnit is available
+if [ ! -f "../vendor/bin/phpunit" ]; then
+    echo "❌ PHPUnit is not installed"
+    echo "Please run: composer install"
+    exit 1
+fi
+
+echo "🚀 Running PHPUnit tests..."
+php run-phpunit-tests.php
+TEST_RESULT=$?
+
+if [ $TEST_RESULT -eq 0 ]; then
+    echo ""
+    echo "🎉 All tests passed! Proceeding with push to main..."
+    exit 0
+else
+    echo ""
+    echo "💥 Tests failed! Push to main blocked."
+    echo ""
+    echo "To skip tests, use: git push --no-verify"
+    echo "To run tests manually: cd be/tests && php run-phpunit-tests.php"
+    exit 1
+fi
