@@ -32,8 +32,8 @@ fi
 
 # Check if backend is running (try both localhost and custom domain)
 BACKEND_URL="http://${BACKEND_HOST:-iliadApi}"
-if ! curl -s http://localhost:8000/ > /dev/null 2>&1 && ! curl -s "$BACKEND_URL/" > /dev/null 2>&1; then
-    echo "❌ Backend is not running at http://localhost:8000 or $BACKEND_URL"
+if ! curl -s http://localhost:8080/ > /dev/null 2>&1 && ! curl -s "$BACKEND_URL/" > /dev/null 2>&1; then
+    echo "❌ Backend is not running at http://localhost:8080 or $BACKEND_URL"
     echo "Please start the backend with: docker-compose up -d"
     echo ""
     echo "To skip this check, use: git push --no-verify"

@@ -48,6 +48,19 @@ Before you begin, ensure you have the following installed:
 - [Git](https://git-scm.com/)
 - [TablePlus](https://tableplus.com/) (recommended for database management)
 
+## 🔧 Initial Setup
+
+After cloning the repository, you need to set up Git hooks for code quality:
+
+```bash
+# Set up Git hooks (required for code quality checks)
+./setup-hooks.sh
+```
+
+This will install:
+- **pre-commit**: Automatic PHP CS Fixer and Prettier formatting
+- **pre-push**: Backend API tests before pushing to main branch
+
 ## 🚀 Quick Start with Docker
 
 ### 1. Clone the Repository
