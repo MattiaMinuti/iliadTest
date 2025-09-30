@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted, computed } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { orderService } from '@/services/orders';
@@ -215,10 +215,10 @@ export default {
     });
 
     const headers = computed(() => [
-      { title: t('orders.orderName'), key: 'name', sortable: true },
-      { title: t('orders.date'), key: 'order_date', sortable: true },
-      { title: t('orders.status'), key: 'status', sortable: true },
-      { title: t('orders.total'), key: 'total_amount', sortable: true },
+      { title: t('orders.orderName'), key: 'name', sortable: false },
+      { title: t('orders.date'), key: 'order_date', sortable: false },
+      { title: t('orders.status'), key: 'status', sortable: false },
+      { title: t('orders.total'), key: 'total_amount', sortable: false },
       {
         title: t('orders.actions'),
         key: 'actions',
@@ -296,9 +296,7 @@ export default {
 
         // Load the complete order with products before editing
         const response = await orderService.getOrder(order.id);
-        const completeOrder = response.data;
-
-        orderDialog.order = completeOrder;
+        orderDialog.order = response.data;
         orderDialog.mode = 'edit';
         orderDialog.show = true;
       } catch (error) {
